@@ -11,44 +11,44 @@ public class QuadtreeNode : MonoBehaviour {
     public QuadtreeNode bottom_left = null;
     public QuadtreeNode bottom_right = null;
 
-    public void subdivde(int depth, int max_depth) {
-        GameObject obj1 = new GameObject();
-        obj1.transform.parent = transform;
-        obj1.transform.position = new Vector3(transform.position.x + size, transform.position.y, transform.position.z - size);
-        top_left = obj1.AddComponent<QuadtreeNode>();
-        top_left.parent = this;
-        top_left.size = size / 2;
+    public void subdivde(Quadtree qt) {
+        if (!top_left) {
+            GameObject obj1 = new GameObject();
+            obj1.transform.parent = transform;
+            obj1.transform.position = new Vector3(transform.position.x + size, transform.position.y, transform.position.z - size);
+            top_left = obj1.AddComponent<QuadtreeNode>();
+            top_left.parent = this;
+            top_left.size = size / 2;
+        }
 
-        GameObject obj2 = new GameObject();
-        obj2.transform.parent = transform;
-        obj2.transform.position = new Vector3(transform.position.x + size, transform.position.y, transform.position.z + size);
-        top_right = obj2.AddComponent<QuadtreeNode>();
-        top_right.parent = this;
-        top_right.size = size / 2;
+        if (!top_right) {
+            GameObject obj2 = new GameObject();
+            obj2.transform.parent = transform;
+            obj2.transform.position = new Vector3(transform.position.x + size, transform.position.y, transform.position.z + size);
+            top_right = obj2.AddComponent<QuadtreeNode>();
+            top_right.parent = this;
+            top_right.size = size / 2;
+        }
 
-        GameObject obj3 = new GameObject();
-        obj3.transform.parent = transform;
-        obj3.transform.position = new Vector3(transform.position.x - size, transform.position.y, transform.position.z - size);
-        bottom_left = obj3.AddComponent<QuadtreeNode>();
-        bottom_left.parent = this;
-        bottom_left.size = size / 2;
+        if (!bottom_left) {
+            GameObject obj3 = new GameObject();
+            obj3.transform.parent = transform;
+            obj3.transform.position = new Vector3(transform.position.x - size, transform.position.y, transform.position.z - size);
+            bottom_left = obj3.AddComponent<QuadtreeNode>();
+            bottom_left.parent = this;
+            bottom_left.size = size / 2;
+        }
 
-        GameObject obj4 = new GameObject();
-        obj4.transform.parent = transform;
-        obj4.transform.position = new Vector3(transform.position.x - size, transform.position.y, transform.position.z + size);
-        bottom_right = obj4.AddComponent<QuadtreeNode>();
-        bottom_right.parent = this;
-        bottom_right.size = size / 2;
+        if (!bottom_right) {
+            GameObject obj4 = new GameObject();
+            obj4.transform.parent = transform;
+            obj4.transform.position = new Vector3(transform.position.x - size, transform.position.y, transform.position.z + size);
+            bottom_right = obj4.AddComponent<QuadtreeNode>();
+            bottom_right.parent = this;
+            bottom_right.size = size / 2;
+        }
 
         is_leaf = false;
-
-        if (depth <= max_depth) {
-            top_left.subdivde(depth + 1, max_depth);
-            top_right.subdivde(depth + 1, max_depth);
-            bottom_left.subdivde(depth + 1, max_depth);
-            bottom_right.subdivde(depth + 1, max_depth);
-
-        }
     }
 
     private void Update() {
