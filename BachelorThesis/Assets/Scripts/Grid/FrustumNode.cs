@@ -18,4 +18,11 @@ public class FrustumNode : MonoBehaviour {
         frustum.nearClipPlane = 1.0f;
         frustum.farClipPlane = 100.0f;
     }
+
+    public void calc_dlods() {
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(frustum);
+
+        FindObjectsOfType<DLODGroup>();
+        // Bounds bounds = m.bounds;
+    }
 }
