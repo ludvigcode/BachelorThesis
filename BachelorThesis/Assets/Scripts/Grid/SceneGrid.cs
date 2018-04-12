@@ -7,9 +7,9 @@ public class SceneGrid : MonoBehaviour {
     public int size = 10;
     public float spread = 10.0f;
     public GameObject grid_obj = null;
-    bool is_initialized = false;
+    public GridNode[,] grid;
 
-    private GridNode[,] grid;
+    public bool is_initialized = false;
 
     public void init() {
         if (is_initialized) {
@@ -18,7 +18,6 @@ public class SceneGrid : MonoBehaviour {
 
         grid_obj = new GameObject();
         grid_obj.transform.parent = transform;
-
         grid = new GridNode[size + 1, size + 1];
 
         for (int x = 0; x <= size; ++x) {
@@ -32,50 +31,46 @@ public class SceneGrid : MonoBehaviour {
             }
         }
 
-        grid[0, 0].add_frustum(Direction.NORTH);
-        grid[0, 0].add_frustum(Direction.EAST);
-        grid[0, 0].add_frustum(Direction.SOUTH);
-        grid[0, 0].add_frustum(Direction.WEST);
+        grid[0, 0].add_frustums();
+        grid[0, size].add_frustums();
+        grid[size, 0].add_frustums();
+        grid[size, size].add_frustums();
+        grid[0, size / 2].add_frustums();
+        grid[size, size / 2].add_frustums();
+        grid[size / 2, 0].add_frustums();
+        grid[size / 2, size].add_frustums();
+        grid[size / 2, size / 2].add_frustums();
 
-        grid[0, size].add_frustum(Direction.NORTH);
-        grid[0, size].add_frustum(Direction.EAST);
-        grid[0, size].add_frustum(Direction.SOUTH);
-        grid[0, size].add_frustum(Direction.WEST);
+        for (int x = 0; x <= size; ++x) {
+            int prev_z = -1;
+            int prev_num_vertices = -1;
+            for (int z = 0; z <= size; ++z) {
+                int vertices = (grid[x, z].get_num_vertices(Direction.NORTH));
+                if (vertices > 0) {
+                    if (prev_num_vertices != -1) {
+                        float diff = prev_num_vertices / vertices;
+                        if (diff < 0.5f || diff > 2.0f) {
+                            int new_z = prev_z + ((z - prev_z) / 2);
 
-        grid[size, 0].add_frustum(Direction.NORTH);
-        grid[size, 0].add_frustum(Direction.EAST);
-        grid[size, 0].add_frustum(Direction.SOUTH);
-        grid[size, 0].add_frustum(Direction.WEST);
 
-        grid[size, size].add_frustum(Direction.NORTH);
-        grid[size, size].add_frustum(Direction.EAST);
-        grid[size, size].add_frustum(Direction.SOUTH);
-        grid[size, size].add_frustum(Direction.WEST);
+                            grid[x, new_z].add_frustums();
+                            Debug.Log(new_z);
+                        }
+                    }
 
-        grid[0, size / 2].add_frustum(Direction.NORTH);
-        grid[0, size / 2].add_frustum(Direction.EAST);
-        grid[0, size / 2].add_frustum(Direction.SOUTH);
-        grid[0, size / 2].add_frustum(Direction.WEST);
+                    prev_z = z;
+                    prev_num_vertices = vertices;
+                }
+            }
+        }
 
-        grid[size, size / 2].add_frustum(Direction.NORTH);
-        grid[size, size / 2].add_frustum(Direction.EAST);
-        grid[size, size / 2].add_frustum(Direction.SOUTH);
-        grid[size, size / 2].add_frustum(Direction.WEST);
-
-        grid[size / 2, 0].add_frustum(Direction.NORTH);
-        grid[size / 2, 0].add_frustum(Direction.EAST);
-        grid[size / 2, 0].add_frustum(Direction.SOUTH);
-        grid[size / 2, 0].add_frustum(Direction.WEST);
-
-        grid[size / 2, size].add_frustum(Direction.NORTH);
-        grid[size / 2, size].add_frustum(Direction.EAST);
-        grid[size / 2, size].add_frustum(Direction.SOUTH);
-        grid[size / 2, size].add_frustum(Direction.WEST);
-
-        grid[size / 2, size / 2].add_frustum(Direction.NORTH);
-        grid[size / 2, size / 2].add_frustum(Direction.EAST);
-        grid[size / 2, size / 2].add_frustum(Direction.SOUTH);
-        grid[size / 2, size / 2].add_frustum(Direction.WEST);
+        for (int x = 0; x <= size; ++x) {
+            int prev_z = -1;
+            int prev_num_vertices = -1;
+            for (int z = size; z <= 0; --z) {
+                //Debug.Log(grid[x, z].get_num_vertices(Direction.SOUTH));
+            }
+        }
 
         is_initialized = true;
     }

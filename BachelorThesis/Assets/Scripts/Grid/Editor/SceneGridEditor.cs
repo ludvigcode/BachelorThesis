@@ -16,4 +16,33 @@ public class SceneGridEditor : Editor {
             sg.init();
         }
     }
+
+    private void OnSceneGUI() {
+        SceneGrid sg = (SceneGrid)target;
+        if (!sg.is_initialized) {
+            return;
+        }
+
+        Handles.color = Color.magenta;
+
+        for (int x = 0; x <= sg.size; ++x) {
+            for (int z = 0; z <= sg.size; ++z) {
+                if (sg.grid[x, z].has_frustum(Direction.NORTH)) {
+                    Handles.DrawLine(sg.grid[x, z].transform.position, sg.grid[x, z].transform.position + new Vector3(0.0f, 0.0f, 1.5f));
+                }
+
+                if (sg.grid[x, z].has_frustum(Direction.EAST)) {
+                    Handles.DrawLine(sg.grid[x, z].transform.position, sg.grid[x, z].transform.position + new Vector3(1.5f, 0.0f, 0.0f));
+                }
+
+                if (sg.grid[x, z].has_frustum(Direction.SOUTH)) {
+                    Handles.DrawLine(sg.grid[x, z].transform.position, sg.grid[x, z].transform.position + new Vector3(0.0f, 0.0f, -1.5f));
+                }
+
+                if (sg.grid[x, z].has_frustum(Direction.WEST)) {
+                    Handles.DrawLine(sg.grid[x, z].transform.position, sg.grid[x, z].transform.position + new Vector3(-1.5f, 0.0f, 0.0f));
+                }
+            }
+        }
+    }
 }

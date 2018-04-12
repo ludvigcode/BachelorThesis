@@ -15,6 +15,13 @@ public class GridNode : MonoBehaviour {
     private FrustumNode south = null;
     private FrustumNode west = null;
 
+    public void add_frustums() {
+        add_frustum(Direction.NORTH);
+        add_frustum(Direction.EAST);
+        add_frustum(Direction.SOUTH);
+        add_frustum(Direction.WEST);
+    }
+
     public void add_frustum(Direction dir) {
         if (dir == Direction.NORTH && !north) {
             GameObject obj = new GameObject();
@@ -109,5 +116,24 @@ public class GridNode : MonoBehaviour {
             node.west.prev_node = west;
             return;
         }
+    }
+
+    public int get_num_vertices(Direction dir) {
+        if (dir == Direction.NORTH && north) {
+            return north.calc_vertices();
+        }
+
+        if (dir == Direction.EAST && east) {
+            return east.calc_vertices();
+        }
+
+        if (dir == Direction.SOUTH && south) {
+            return south.calc_vertices();
+        }
+
+        if (dir == Direction.WEST && west) {
+            return west.calc_vertices();
+        }
+        return -1;
     }
 }

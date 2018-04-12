@@ -19,10 +19,24 @@ public class FrustumNode : MonoBehaviour {
         frustum.farClipPlane = 100.0f;
     }
 
-    public void calc_dlods() {
+    public int calc_vertices() {
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(frustum);
 
-        FindObjectsOfType<DLODGroup>();
-        // Bounds bounds = m.bounds;
+        DLODGroup[] dlods = FindObjectsOfType<DLODGroup>();
+
+        int num_vertices = 0;
+
+        foreach (DLODGroup dlod in dlods) {
+            BoxCollider collider = dlod.GetComponent<BoxCollider>();
+            if (GeometryUtility.TestPlanesAABB(planes, collider.bounds)) {
+                dlod.dlods[0].SetActive(true);
+                MeshFilter mesh_filter = dlod.dlods[0].GetComponent<MeshFilter>();
+                num_vertices += mesh_filter.sharedMesh.triangles.Length;
+            } else {
+                dlod.dlods[0].SetActive(false);
+            }
+        }
+
+        return num_vertices;
     }
 }
