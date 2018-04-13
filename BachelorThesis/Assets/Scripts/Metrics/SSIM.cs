@@ -64,8 +64,8 @@ public class SSIM : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        float index = compute_mssim_string("Images/BoatOriginal.jpg", "Images/BoatNoise.jpg");
-        Debug.Log("MSSIM: " + index);
+        //float index = compute_mssim_string("Images/BoatOriginal.jpg", "Images/BoatNoise.jpg");
+        //Debug.Log("MSSIM: " + index);
     }
 }
 
