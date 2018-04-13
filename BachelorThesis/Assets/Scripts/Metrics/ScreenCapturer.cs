@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class ScreenCapturer : MonoBehaviour {
     #endregion
 
     #region Public Functions
+
+
     public byte[] capture_screenshot()
     {
         // Create screenshot objects if necessary.
@@ -66,6 +69,13 @@ public class ScreenCapturer : MonoBehaviour {
     #endregion
     private void Start()
     {
+        String currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+        String dllPath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "Assets" + Path.DirectorySeparatorChar + "Plugins";
+        if (currentPath.Contains(dllPath) == false)
+        {
+            Environment.SetEnvironmentVariable("PATH", currentPath + Path.PathSeparator + dllPath, EnvironmentVariableTarget.Process);
+        }
+
         _main_camera = Camera.main;
         byte[] image1 = capture_screenshot();
         obj.SetActive(false);
@@ -75,5 +85,6 @@ public class ScreenCapturer : MonoBehaviour {
     }
 
     void Update () {
+
     }
 }
