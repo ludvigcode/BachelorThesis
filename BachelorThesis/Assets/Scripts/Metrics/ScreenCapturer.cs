@@ -25,7 +25,7 @@ public class ScreenCapturer : MonoBehaviour {
     public byte[] capture_screenshot()
     {
         // Create screenshot objects if necessary.
-        if (_render_texture == null)
+        if (!_render_texture)
         {
             // creates off-screen render texture that can rendered into.
             _rect = new Rect(0, 0, capture_width, capture_height);
@@ -46,8 +46,8 @@ public class ScreenCapturer : MonoBehaviour {
         _main_camera.targetTexture = null;
         RenderTexture.active = null;
 
-        byte[] fileData = null;
-        fileData = _screenshot.EncodeToJPG();
+        byte[] file_data = null;
+        file_data = _screenshot.EncodeToJPG();
 
         // cleanup if needed
         if (optimize == false)
@@ -57,13 +57,11 @@ public class ScreenCapturer : MonoBehaviour {
             _screenshot = null;
         }
 
-        return fileData;
+        return file_data;
     }
     #endregion
 
     #region Private Functions
-
-    #endregion
     private void Start()
     {
         _main_camera = Camera.main;
@@ -76,4 +74,5 @@ public class ScreenCapturer : MonoBehaviour {
 
     void Update () {
     }
+    #endregion
 }
