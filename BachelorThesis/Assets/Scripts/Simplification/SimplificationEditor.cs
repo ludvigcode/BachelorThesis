@@ -7,6 +7,7 @@ using UnityEditor;
 [CustomEditor(typeof(Simplification))]
 public class SimplificationEditor : Editor {
 
+    #region Public Functions
     public override void OnInspectorGUI()
     {
         Simplification simp = (Simplification)target;
@@ -17,29 +18,36 @@ public class SimplificationEditor : Editor {
         {
             simp.create_lod();
 
-            foreach (KeyValuePair<int, List<Mesh>> hash in simp.table)
+            save_lods_to_file(simp);
+        }
+    }
+    #endregion
+
+    #region Private Functions
+    private void save_lods_to_file(Simplification simp)
+    {
+        foreach (KeyValuePair<int, List<Mesh>> hash in simp.table)
+        {
+            string directorypath = "Assets/Meshes/Mesh" + hash.Key.ToString();
+            try
             {
-                string directorypath = "Assets/Meshes/Mesh" + hash.Key.ToString();
-                try
+                if (!Directory.Exists(directorypath))
                 {
-                    if (!Directory.Exists(directorypath))
-                    {
-                        Directory.CreateDirectory(directorypath);
-                    }
-
-                }
-                catch (IOException ex)
-                {
-                    Debug.Log(ex.Message);
+                    Directory.CreateDirectory(directorypath);
                 }
 
-                int lod = 0;
-                foreach (Mesh mesh in hash.Value)
-                {
-                    string savepath = directorypath + "/" + hash.Key.ToString() + "_" + lod.ToString() + ".asset";
-                    save_mesh_obj(mesh, savepath);
-                    lod++;
-                }
+            }
+            catch (IOException ex)
+            {
+                Debug.Log(ex.Message);
+            }
+
+            int lod = 0;
+            foreach (Mesh mesh in hash.Value)
+            {
+                string savepath = directorypath + "/" + hash.Key.ToString() + "_" + lod.ToString() + ".asset";
+                save_mesh_obj(mesh, savepath);
+                lod++;
             }
         }
     }
@@ -48,4 +56,5 @@ public class SimplificationEditor : Editor {
     {
         AssetDatabase.CreateAsset(mesh, path);
     }
+    #endregion
 }
