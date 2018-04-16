@@ -41,18 +41,18 @@ public class ScreenCapturer : MonoBehaviour {
         _main_camera.Render();
 
         // read pixels will read from the currently active render texture so make our offscreen 
-        // render texture active and then read the pixels
+        // render texture active and then read the pixels.
         RenderTexture.active = _render_texture;
         _screenshot.ReadPixels(_rect, 0, 0);
 
-        // reset active camera texture and render texture
+        // reset active camera texture and render texture.
         _main_camera.targetTexture = null;
         RenderTexture.active = null;
 
         byte[] fileData = null;
         fileData = _screenshot.EncodeToJPG();
 
-        // cleanup if needed
+        // cleanup if needed.
         if (optimize == false)
         {
             Destroy(_render_texture);
