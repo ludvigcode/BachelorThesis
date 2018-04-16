@@ -11,13 +11,13 @@ public class SimplificationEditor : Editor {
     {
         Simplification simp = (Simplification)target;
 
-        simp.lod_levels = EditorGUILayout.IntField(simp.lod_levels);
+        simp.lod_levels = EditorGUILayout.IntField("LOD Levels", simp.lod_levels);
 
         if (GUILayout.Button("Create LODs"))
         {
             simp.create_lod();
 
-            foreach (var hash in simp.table)
+            foreach (KeyValuePair<int, List<Mesh>> hash in simp.table)
             {
                 string directorypath = "Assets/Meshes/Mesh" + hash.Key.ToString();
                 try
@@ -34,7 +34,7 @@ public class SimplificationEditor : Editor {
                 }
 
                 int lod = 0;
-                foreach (Mesh mesh in simp.table[hash.Key])
+                foreach (Mesh mesh in hash.Value)
                 {
                     string savepath = directorypath + "/" + hash.Key.ToString() + "_" + lod.ToString() + ".asset";
                     save_mesh_obj(mesh, savepath);
