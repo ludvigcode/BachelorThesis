@@ -6,6 +6,7 @@ public class SceneGrid : MonoBehaviour {
     public int triangle_limit = 1000;
     public int size = 10;
     public float spread = 10.0f;
+    public float threshold = 2.0f;
     public GameObject grid_obj = null;
     public GridNode[,] grid;
 
@@ -41,12 +42,28 @@ public class SceneGrid : MonoBehaviour {
         grid[size / 2, size].add_frustums();
         grid[size / 2, size / 2].add_frustums();
 
+        for (int i = 0; i < 4; ++i) {
+            grid[0, 0].generate_dlod_table((Direction)i, triangle_limit);
+            grid[0, size].generate_dlod_table((Direction)i, triangle_limit);
+            grid[size, 0].generate_dlod_table((Direction)i, triangle_limit);
+            grid[size, size].generate_dlod_table((Direction)i, triangle_limit);
+            grid[0, size / 2].generate_dlod_table((Direction)i, triangle_limit);
+            grid[size, size / 2].generate_dlod_table((Direction)i, triangle_limit);
+            grid[size / 2, 0].generate_dlod_table((Direction)i, triangle_limit);
+            grid[size / 2, size].generate_dlod_table((Direction)i, triangle_limit);
+            grid[size / 2, size / 2].generate_dlod_table((Direction)i, triangle_limit);
+        }
+
+        is_initialized = true;
+    }
+
+    public void subdivide() {
         bool north = false;
         bool east = false;
         bool south = false;
         bool west = false;
         int counter = 0;
-        while ((!north || !east || south || west) && counter < 100) {
+        while ((!north || !east || !south || !west) && counter < 100) {
             north = true;
             east = true;
             south = true;
@@ -56,11 +73,11 @@ public class SceneGrid : MonoBehaviour {
                 int prev_z = -1;
                 int prev_num_vertices = -1;
                 for (int z = 0; z <= size; ++z) {
-                    int vertices = (grid[x, z].get_num_vertices(Direction.NORTH));
+                    int vertices = grid[x, z].get_num_vertices(Direction.NORTH);
                     if (vertices > 0) {
                         if (prev_num_vertices != -1) {
                             float diff = prev_num_vertices / vertices;
-                            if (diff < 0.75f || diff > 1.5f) {
+                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
                                 int new_z = prev_z + ((z - prev_z) / 2);
                                 grid[x, new_z].add_frustums();
                                 north = false;
@@ -74,19 +91,17 @@ public class SceneGrid : MonoBehaviour {
             }
 
             for (int z = 0; z <= size; ++z) {
+                int prev_x = -1;
+                int prev_num_vertices = -1;
                 for (int x = 0; x <= size; ++x) {
-                    int prev_x = -1;
-                    int prev_num_vertices = -1;
-                    int vertices = (grid[x, z].get_num_vertices(Direction.WEST));
-                    Debug.Log(vertices);
+                    int vertices = grid[x, z].get_num_vertices(Direction.EAST);
                     if (vertices > 0) {
                         if (prev_num_vertices != -1) {
                             float diff = prev_num_vertices / vertices;
-                            if (diff < 0.75f || diff > 1.5f) {
-                                int new_z = prev_x + ((x - prev_x) / 2);
-                                grid[x, new_z].add_frustums();
+                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
+                                int new_x = prev_x + ((x - prev_x) / 2);
+                                grid[new_x, z].add_frustums();
                                 east = false;
-                                Debug.Log("YES!");
                             }
                         }
 
@@ -99,15 +114,16 @@ public class SceneGrid : MonoBehaviour {
             for (int x = 0; x <= size; ++x) {
                 int prev_z = -1;
                 int prev_num_vertices = -1;
-                for (int z = size; z <= 0; ++z) {
-                    int vertices = (grid[x, z].get_num_vertices(Direction.SOUTH));
+                for (int z = size; z >= 0; --z) {
+                    int vertices = grid[x, z].get_num_vertices(Direction.SOUTH);
                     if (vertices > 0) {
                         if (prev_num_vertices != -1) {
                             float diff = prev_num_vertices / vertices;
-                            if (diff < 0.75f || diff > 1.5f) {
-                                int new_z = prev_z + ((z - prev_z) / 2);
+                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
+                                int new_z = z + ((prev_z - z) / 2);
                                 grid[x, new_z].add_frustums();
                                 south = false;
+                                Debug.Log("YES!2 SOUTH! :D");
                             }
                         }
 
@@ -118,16 +134,16 @@ public class SceneGrid : MonoBehaviour {
             }
 
             for (int z = 0; z <= size; ++z) {
-                for (int x = size; x <= 0; ++x) {
-                    int prev_x = -1;
-                    int prev_num_vertices = -1;
-                    int vertices = (grid[x, z].get_num_vertices(Direction.EAST));
+                int prev_x = -1;
+                int prev_num_vertices = -1;
+                for (int x = size; x >= 0; --x) {
+                    int vertices = grid[x, z].get_num_vertices(Direction.WEST);
                     if (vertices > 0) {
                         if (prev_num_vertices != -1) {
                             float diff = prev_num_vertices / vertices;
-                            if (diff < 0.75f || diff > 1.5f) {
-                                int new_x = prev_x + ((x - prev_x) / 2);
-                                grid[x, new_x].add_frustums();
+                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
+                                int new_x = x + ((prev_x - x) / 2);
+                                grid[new_x, z].add_frustums();
                                 west = false;
                                 Debug.Log("YES!2");
                             }
@@ -141,7 +157,5 @@ public class SceneGrid : MonoBehaviour {
 
             ++counter;
         }
-
-        is_initialized = true;
     }
 }

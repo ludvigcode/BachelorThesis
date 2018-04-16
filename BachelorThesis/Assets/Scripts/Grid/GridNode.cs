@@ -118,6 +118,28 @@ public class GridNode : MonoBehaviour {
         }
     }
 
+    public void generate_dlod_table(Direction dir, int max_triangles) {
+        if (dir == Direction.NORTH && north) {
+            north.generate_dlod_table(max_triangles);
+            return;
+        }
+
+        if (dir == Direction.EAST && east) {
+            east.generate_dlod_table(max_triangles);
+            return;
+        }
+
+        if (dir == Direction.SOUTH && south) {
+            south.generate_dlod_table(max_triangles);
+            return;
+        }
+
+        if (dir == Direction.WEST && west) {
+            west.generate_dlod_table(max_triangles);
+            return;
+        }
+    }
+
     public int get_num_vertices(Direction dir) {
         if (dir == Direction.NORTH && north) {
             return north.calc_vertices();
