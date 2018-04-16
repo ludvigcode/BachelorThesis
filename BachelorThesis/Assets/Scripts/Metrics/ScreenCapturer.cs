@@ -67,13 +67,6 @@ public class ScreenCapturer : MonoBehaviour {
     #region Private Functions
     private void Start()
     {
-        String currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
-        String dllPath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "Assets" + Path.DirectorySeparatorChar + "Plugins";
-        if (currentPath.Contains(dllPath) == false)
-        {
-            Environment.SetEnvironmentVariable("PATH", currentPath + Path.PathSeparator + dllPath, EnvironmentVariableTarget.Process);
-        }
-
         _main_camera = Camera.main;
         byte[] image1 = capture_screenshot();
         obj.SetActive(false);

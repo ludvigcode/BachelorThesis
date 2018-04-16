@@ -41,35 +41,105 @@ public class SceneGrid : MonoBehaviour {
         grid[size / 2, size].add_frustums();
         grid[size / 2, size / 2].add_frustums();
 
-        for (int x = 0; x <= size; ++x) {
-            int prev_z = -1;
-            int prev_num_vertices = -1;
-            for (int z = 0; z <= size; ++z) {
-                int vertices = (grid[x, z].get_num_vertices(Direction.NORTH));
-                if (vertices > 0) {
-                    if (prev_num_vertices != -1) {
-                        float diff = prev_num_vertices / vertices;
-                        if (diff < 0.5f || diff > 2.0f) {
-                            int new_z = prev_z + ((z - prev_z) / 2);
+        bool north = false;
+        bool east = false;
+        bool south = false;
+        bool west = false;
+        int counter = 0;
+        while ((!north || !east || south || west) && counter < 100) {
+            north = true;
+            east = true;
+            south = true;
+            west = true;
 
-
-                            grid[x, new_z].add_frustums();
-                            Debug.Log(new_z);
+            for (int x = 0; x <= size; ++x) {
+                int prev_z = -1;
+                int prev_num_vertices = -1;
+                for (int z = 0; z <= size; ++z) {
+                    int vertices = (grid[x, z].get_num_vertices(Direction.NORTH));
+                    if (vertices > 0) {
+                        if (prev_num_vertices != -1) {
+                            float diff = prev_num_vertices / vertices;
+                            if (diff < 0.75f || diff > 1.5f) {
+                                int new_z = prev_z + ((z - prev_z) / 2);
+                                grid[x, new_z].add_frustums();
+                                north = false;
+                            }
                         }
-                    }
 
-                    prev_z = z;
-                    prev_num_vertices = vertices;
+                        prev_z = z;
+                        prev_num_vertices = vertices;
+                    }
                 }
             }
-        }
 
-        for (int x = 0; x <= size; ++x) {
-            int prev_z = -1;
-            int prev_num_vertices = -1;
-            for (int z = size; z <= 0; --z) {
-                //Debug.Log(grid[x, z].get_num_vertices(Direction.SOUTH));
+            for (int z = 0; z <= size; ++z) {
+                for (int x = 0; x <= size; ++x) {
+                    int prev_x = -1;
+                    int prev_num_vertices = -1;
+                    int vertices = (grid[x, z].get_num_vertices(Direction.WEST));
+                    Debug.Log(vertices);
+                    if (vertices > 0) {
+                        if (prev_num_vertices != -1) {
+                            float diff = prev_num_vertices / vertices;
+                            if (diff < 0.75f || diff > 1.5f) {
+                                int new_z = prev_x + ((x - prev_x) / 2);
+                                grid[x, new_z].add_frustums();
+                                east = false;
+                                Debug.Log("YES!");
+                            }
+                        }
+
+                        prev_x = x;
+                        prev_num_vertices = vertices;
+                    }
+                }
             }
+
+            for (int x = 0; x <= size; ++x) {
+                int prev_z = -1;
+                int prev_num_vertices = -1;
+                for (int z = size; z <= 0; ++z) {
+                    int vertices = (grid[x, z].get_num_vertices(Direction.SOUTH));
+                    if (vertices > 0) {
+                        if (prev_num_vertices != -1) {
+                            float diff = prev_num_vertices / vertices;
+                            if (diff < 0.75f || diff > 1.5f) {
+                                int new_z = prev_z + ((z - prev_z) / 2);
+                                grid[x, new_z].add_frustums();
+                                south = false;
+                            }
+                        }
+
+                        prev_z = z;
+                        prev_num_vertices = vertices;
+                    }
+                }
+            }
+
+            for (int z = 0; z <= size; ++z) {
+                for (int x = size; x <= 0; ++x) {
+                    int prev_x = -1;
+                    int prev_num_vertices = -1;
+                    int vertices = (grid[x, z].get_num_vertices(Direction.EAST));
+                    if (vertices > 0) {
+                        if (prev_num_vertices != -1) {
+                            float diff = prev_num_vertices / vertices;
+                            if (diff < 0.75f || diff > 1.5f) {
+                                int new_x = prev_x + ((x - prev_x) / 2);
+                                grid[x, new_x].add_frustums();
+                                west = false;
+                                Debug.Log("YES!2");
+                            }
+                        }
+
+                        prev_x = x;
+                        prev_num_vertices = vertices;
+                    }
+                }
+            }
+
+            ++counter;
         }
 
         is_initialized = true;
