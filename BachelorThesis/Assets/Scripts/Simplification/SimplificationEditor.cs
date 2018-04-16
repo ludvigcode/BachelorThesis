@@ -17,10 +17,9 @@ public class SimplificationEditor : Editor {
         {
             simp.create_lod();
 
-            int obj = 0;
             foreach (var hash in simp.table)
             {
-                string directorypath = "Assets/Meshes/Mesh" + obj.ToString();
+                string directorypath = "Assets/Meshes/Mesh" + hash.Key.ToString();
                 try
                 {
                     if (!Directory.Exists(directorypath))
@@ -37,11 +36,10 @@ public class SimplificationEditor : Editor {
                 int lod = 0;
                 foreach (Mesh mesh in simp.table[hash.Key])
                 {
-                    string savepath = directorypath + "/" + obj.ToString() + "_" + lod.ToString() + ".asset";
+                    string savepath = directorypath + "/" + hash.Key.ToString() + "_" + lod.ToString() + ".asset";
                     save_mesh_obj(mesh, savepath);
                     lod++;
                 }
-                obj++;
             }
         }
     }
