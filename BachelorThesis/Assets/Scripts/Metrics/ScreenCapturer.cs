@@ -23,13 +23,9 @@ public class ScreenCapturer : MonoBehaviour {
     #endregion
 
     #region Public Functions
-
-
-    public byte[] capture_screenshot()
-    {
+    public byte[] capture_screenshot() {
         // Create screenshot objects if necessary.
-        if (_render_texture == null)
-        {
+        if (!_render_texture) {
             // creates off-screen render texture that can rendered into.
             _rect = new Rect(0, 0, capture_width, capture_height);
             _render_texture = new RenderTexture(capture_width, capture_height, 24);
@@ -49,33 +45,22 @@ public class ScreenCapturer : MonoBehaviour {
         _main_camera.targetTexture = null;
         RenderTexture.active = null;
 
-        byte[] fileData = null;
-        fileData = _screenshot.EncodeToJPG();
+        byte[] file_data = null;
+        file_data = _screenshot.EncodeToJPG();
 
-        // cleanup if needed
-        if (optimize == false)
-        {
+        // Cleanup if needed.
+        if (optimize == false) {
             Destroy(_render_texture);
             _render_texture = null;
             _screenshot = null;
         }
 
-        return fileData;
+        return file_data;
     }
     #endregion
 
     #region Private Functions
-
-    #endregion
-    private void Start()
-    {
-        String currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
-        String dllPath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "Assets" + Path.DirectorySeparatorChar + "Plugins";
-        if (currentPath.Contains(dllPath) == false)
-        {
-            Environment.SetEnvironmentVariable("PATH", currentPath + Path.PathSeparator + dllPath, EnvironmentVariableTarget.Process);
-        }
-
+    private void Start() {
         _main_camera = Camera.main;
         byte[] image1 = capture_screenshot();
         obj.SetActive(false);
@@ -83,8 +68,5 @@ public class ScreenCapturer : MonoBehaviour {
         float index = SSIM.compute_mssim_byte(image1, image2, capture_width, capture_height);
         Debug.Log("MSSIM: " + index);
     }
-
-    void Update () {
-
-    }
+    #endregion
 }

@@ -7,10 +7,20 @@ using UnityEditor;
 public class SceneGridEditor : Editor {
     public override void OnInspectorGUI() {
         SceneGrid sg = (SceneGrid)target;
+        
+        EditorGUILayout.LabelField("Grid", EditorStyles.boldLabel);
+        sg.size = EditorGUILayout.IntField("Size", sg.size);
+        sg.spread = EditorGUILayout.FloatField("Spread", sg.spread);
 
-        sg.triangle_limit = EditorGUILayout.IntField(sg.triangle_limit);
-        sg.size = EditorGUILayout.IntField(sg.size);
-        sg.spread = EditorGUILayout.FloatField(sg.spread);
+        EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField("Sampling", EditorStyles.boldLabel);
+        sg.triangle_limit = EditorGUILayout.IntField("Triangle Limit", sg.triangle_limit);
+        sg.width = EditorGUILayout.IntField("Texture Width", sg.width);
+        sg.height = EditorGUILayout.IntField("Texture Height", sg.height);
+        sg.threshold = EditorGUILayout.FloatField("Subdivision Treshold", sg.threshold);
+
+        EditorGUILayout.Space();
 
         if (GUILayout.Button("Init")) {
             sg.init();
