@@ -5,18 +5,9 @@ using System.Runtime.InteropServices;
 using System.IO;
 using UnityEngine;
 
-public class SSIM : MonoBehaviour
+public static class SSIM
 {
-
-    #region Public Variables
-
-    #endregion
-
-    #region Private Variables
-
-    #endregion
-
-    #region Public Functions
+    #region Public Methods
     // To be used for comparing stored images.
     public static float compute_mssim_string(string imgpath1, string imgpath2)
     {
@@ -36,18 +27,21 @@ public class SSIM : MonoBehaviour
         }
     }
 
+    public static float compute_mssim_textures(Texture2D reference, Texture2D image, int width, int height) {
+        return compute_mssim_byte(reference.EncodeToPNG(), reference.EncodeToPNG(), width, height);
+    }
+
     // To be used when comparing screenshots in run-time.
-    public static float compute_mssim_byte(byte[] imgarray1, byte[] imgarray2, int w, int h)
-    {
+    public static float compute_mssim_byte(byte[] reference, byte[] image, int width, int height) {
         // Allocate unmanaged memory.
-        IntPtr ua1 = Marshal.AllocHGlobal(Marshal.SizeOf(imgarray1[0]) * imgarray1.Length);
-        IntPtr ua2 = Marshal.AllocHGlobal(Marshal.SizeOf(imgarray2[0]) * imgarray2.Length);
+        IntPtr ua1 = Marshal.AllocHGlobal(Marshal.SizeOf(reference[0]) * reference.Length);
+        IntPtr ua2 = Marshal.AllocHGlobal(Marshal.SizeOf(image[0]) * image.Length);
 
         // Copy content from byte arrays into the unmanaged memory.
-        Marshal.Copy(imgarray1, 0, ua1, imgarray1.Length);
-        Marshal.Copy(imgarray2, 0, ua2, imgarray2.Length);
+        Marshal.Copy(reference, 0, ua1, reference.Length);
+        Marshal.Copy(image, 0, ua2, image.Length);
 
-        float result = OpenCVInterop.mssim_byte(ua1, ua2, w, h);
+        float result = OpenCVInterop.mssim_byte(ua1, ua2, width, height);
 
         // De-allocate the unmanaged memory.
         Marshal.FreeHGlobal(ua1);
@@ -56,22 +50,10 @@ public class SSIM : MonoBehaviour
         return result;
     }
     #endregion
-
-    #region Private Functions
-
-    #endregion
-
-    // Use this for initialization
-    void Start()
-    {
-        //float index = compute_mssim_string("Images/BoatOriginal.jpg", "Images/BoatNoise.jpg");
-        //Debug.Log("MSSIM: " + index);
-    }
 }
 
 // Define the functions which can be called from the .dll.
-internal static class OpenCVInterop
-{
+internal static class OpenCVInterop {
     [DllImport("SSIM")]
     internal static extern float mssim_string(string img1, string img2);
     [DllImport("SSIM")]
