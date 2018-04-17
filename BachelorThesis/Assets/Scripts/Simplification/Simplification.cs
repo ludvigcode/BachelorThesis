@@ -24,7 +24,8 @@ public class RenderingTarget
         mesh_filter = filter;
         lod_array = new List<Mesh>(mesh_list);
 
-        //set_lod(lod_array.Count - 1);
+        // Set to highest quality.
+        //set_lod(0);
     }
 
     // Set the rendering target LOD version.
@@ -134,37 +135,6 @@ public class Simplification : MonoBehaviour
             // Set the resulting mesh to the current LOD version.
             list.Add(destMesh);
 
-        }
-    }
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        // Remove this later, just for the sake of testing.
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            _counter++;
-            _counter = Mathf.Clamp(_counter, 0, lod_levels - 1);
-
-            foreach (RenderingTarget rt in _scene_objects)
-            {
-                rt.set_lod(_counter);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            _counter--;
-            _counter = Mathf.Clamp(_counter, 0, lod_levels - 1);
-
-            foreach (RenderingTarget rt in _scene_objects)
-            {
-                rt.set_lod(_counter);
-            }
         }
     }
 
