@@ -56,7 +56,6 @@ public class FrustumNode : MonoBehaviour {
         DestroyImmediate(tex);
 
         byte[] bytes = screen_shot.EncodeToPNG();
-        System.IO.File.WriteAllBytes("C:/Users/BTH/Documents/GitHub/lol.png", bytes);
-
+        // System.IO.File.WriteAllBytes("C:/Users/BTH/Documents/GitHub/lol.png", bytes);
     }
 }

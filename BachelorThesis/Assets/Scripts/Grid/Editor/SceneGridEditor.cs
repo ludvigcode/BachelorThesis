@@ -8,7 +8,6 @@ public class SceneGridEditor : Editor {
     public override void OnInspectorGUI() {
         SceneGrid sg = (SceneGrid)target;
         
-
         EditorGUILayout.LabelField("Grid", EditorStyles.boldLabel);
         sg.size = EditorGUILayout.IntField("Size", sg.size);
         sg.spread = EditorGUILayout.FloatField("Spread", sg.spread);
