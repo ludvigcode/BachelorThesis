@@ -44,6 +44,4 @@ public static class Bezier {
             3f * t * t * (p3 - p2);
     }
 
-
-
 }
