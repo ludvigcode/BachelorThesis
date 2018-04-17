@@ -3,13 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BezierControlPointMode
-{
-    Free,
-    Aligned,
-    Mirrored
-}
-
 public class BezierSpline : MonoBehaviour
 {
     #region Public Variables
@@ -19,53 +12,53 @@ public class BezierSpline : MonoBehaviour
 
     #region Private Variables
     [SerializeField]
-    private bool loop;
+    private bool _loop;
 
-    private BezierControlPointMode[] modes;
+    private BezierControlPointMode[] _modes;
     #endregion
 
     #region Public Functions
-    public bool Loop
+    public bool loop
     {
         get
         {
-            return loop;
+            return _loop;
         }
         set
         {
-            loop = value;
+            _loop = value;
             if (value == true)
             {
-                modes[modes.Length - 1] = modes[0];
-                SetControlPoint(0, points[0]);
+                _modes[_modes.Length - 1] = _modes[0];
+                set_control_point(0, points[0]);
             }
         }
     }
 
-    public BezierControlPointMode GetControlPointMode(int index)
+    public BezierControlPointMode get_control_point_mode(int index)
     {
-        return modes[(index + 1) / 3];
+        return _modes[(index + 1) / 3];
     }
 
-    public void SetControlPointMode(int index, BezierControlPointMode mode)
+    public void set_control_point_mode(int index, BezierControlPointMode mode)
     {
         int modeIndex = (index + 1) / 3;
-        modes[modeIndex] = mode;
-        if (loop)
+        _modes[modeIndex] = mode;
+        if (_loop)
         {
             if (modeIndex == 0)
             {
-                modes[modes.Length - 1] = mode;
+                _modes[_modes.Length - 1] = mode;
             }
-            else if (modeIndex == modes.Length - 1)
+            else if (modeIndex == _modes.Length - 1)
             {
-                modes[0] = mode;
+                _modes[0] = mode;
             }
         }
-        EnforceMode(index);
+        _enforce_mode(index);
     }
 
-    public int ControlPointCount
+    public int control_point_count
     {
         get
         {
@@ -73,17 +66,17 @@ public class BezierSpline : MonoBehaviour
         }
     }
 
-    public Vector3 GetControlPoint(int index)
+    public Vector3 get_control_point(int index)
     {
         return points[index];
     }
 
-    public void SetControlPoint(int index, Vector3 point)
+    public void set_control_point(int index, Vector3 point)
     {
         if (index % 3 == 0)
         {
             Vector3 delta = point - points[index];
-            if (loop)
+            if (_loop)
             {
                 if(index == 0)
                 {
@@ -116,10 +109,10 @@ public class BezierSpline : MonoBehaviour
             }
         }
         points[index] = point;
-        EnforceMode(index);
+        _enforce_mode(index);
     }
 
-    public Vector3 GetPoint(float t)
+    public Vector3 get_point(float t)
     {
         int i;
         if (t >= 1f)
@@ -129,15 +122,15 @@ public class BezierSpline : MonoBehaviour
         }
         else
         {
-            t = Mathf.Clamp01(t) * CurveCount;
+            t = Mathf.Clamp01(t) * curve_count;
             i = (int)t;
             t -= i;
             i *= 3;
         }
-        return transform.TransformPoint(Bezier.GetPointCubic(points[i], points[i + 1], points[i + 2], points[i + 3], t));
+        return transform.TransformPoint(Bezier.get_point_cubic(points[i], points[i + 1], points[i + 2], points[i + 3], t));
     }
 
-    public Vector3 GetVelocity(float t)
+    public Vector3 get_velocity(float t)
     {
         int i;
         if (t >= 1f)
@@ -147,21 +140,21 @@ public class BezierSpline : MonoBehaviour
         }
         else
         {
-            t = Mathf.Clamp01(t) * CurveCount;
+            t = Mathf.Clamp01(t) * curve_count;
             i = (int)t;
             t -= i;
             i *= 3;
         }
         return transform.TransformPoint(
-            Bezier.GetFirstDerativeCubic(points[i], points[i + 1], points[i + 2], points[i + 3], t)) - transform.position;
+            Bezier.get_first_derative_cubic(points[i], points[i + 1], points[i + 2], points[i + 3], t)) - transform.position;
     }
 
-    public Vector3 GetDirection(float t)
+    public Vector3 get_direction(float t)
     {
-        return GetVelocity(t).normalized;
+        return get_velocity(t).normalized;
     }
 
-    public int CurveCount
+    public int curve_count
     {
         get
         {
@@ -169,7 +162,7 @@ public class BezierSpline : MonoBehaviour
         }
     }
 
-    public void AddCurve()
+    public void add_curve()
     {
         Vector3 point = points[points.Length - 1];
         Array.Resize(ref points, points.Length + 3);
@@ -180,15 +173,15 @@ public class BezierSpline : MonoBehaviour
         point.x += 1.0f;
         points[points.Length - 1] = point;
 
-        Array.Resize(ref modes, modes.Length + 1);
-        modes[modes.Length - 1] = modes[modes.Length - 2];
-        EnforceMode(points.Length - 4);
+        Array.Resize(ref _modes, _modes.Length + 1);
+        _modes[_modes.Length - 1] = _modes[_modes.Length - 2];
+        _enforce_mode(points.Length - 4);
 
-        if (loop)
+        if (_loop)
         {
             points[points.Length - 1] = points[0];
-            modes[modes.Length - 1] = modes[0];
-            EnforceMode(0);
+            _modes[_modes.Length - 1] = _modes[0];
+            _enforce_mode(0);
         }
     }
 
@@ -201,7 +194,7 @@ public class BezierSpline : MonoBehaviour
             new Vector3(3f, 0f, 0f),
             new Vector3(4f, 0f, 0f)
         };
-        modes = new BezierControlPointMode[]
+        _modes = new BezierControlPointMode[]
         {
             BezierControlPointMode.Free,
             BezierControlPointMode.Free
@@ -211,11 +204,11 @@ public class BezierSpline : MonoBehaviour
     #endregion
 
     #region Private Functions
-    private void EnforceMode(int index)
+    private void _enforce_mode(int index)
     {
         int modeIndex = (index + 1) / 3;
-        BezierControlPointMode mode = modes[modeIndex];
-        if (mode == BezierControlPointMode.Free || !loop && (modeIndex == 0 || modeIndex == modes.Length - 1))
+        BezierControlPointMode mode = _modes[modeIndex];
+        if (mode == BezierControlPointMode.Free || !_loop && (modeIndex == 0 || modeIndex == _modes.Length - 1))
         {
             return;
         }

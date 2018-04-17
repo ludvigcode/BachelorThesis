@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class Bezier {
 
-    public static Vector3 GetPointQuadratic(Vector3 p0, Vector3 p1, Vector3 p2, float t)
+    public static Vector3 get_point_quadratic(Vector3 p0, Vector3 p1, Vector3 p2, float t)
     {
         t = Mathf.Clamp01(t);
         float oneMinusT = 1f - t;
@@ -16,7 +16,7 @@ public static class Bezier {
         //return Vector3.Lerp(Vector3.Lerp(p0, p1, t), Vector3.Lerp(p1, p2, t), t);
     }
 
-    public static Vector3 GetPointCubic(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+    public static Vector3 get_point_cubic(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
     {
         t = Mathf.Clamp01(t);
         float oneMinusT = 1f - t;
@@ -27,14 +27,14 @@ public static class Bezier {
             t * t * t * p3;
     }
 
-    public static Vector3 GetFirstDerativeQuadratic(Vector3 p0, Vector3 p1, Vector3 p2, float t)
+    public static Vector3 get_first_derative_quadratic(Vector3 p0, Vector3 p1, Vector3 p2, float t)
     {
         return
             2f * (1f - t) * (p1 - p0) +
             2f * t * (p2 - p1);
     }
 
-    public static Vector3 GetFirstDerativeCubic(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+    public static Vector3 get_first_derative_cubic(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
     {
         t = Mathf.Clamp01(t);
         float oneMinusT = 1f - t;
