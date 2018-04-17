@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SceneGrid : MonoBehaviour {
     public int triangle_limit = 1000;
+    public int width = 800;
+    public int height = 600;
     public int size = 10;
     public float spread = 10.0f;
     public float threshold = 2.0f;
@@ -43,15 +45,15 @@ public class SceneGrid : MonoBehaviour {
         grid[size / 2, size / 2].add_frustums();
 
         for (int i = 0; i < 4; ++i) {
-            grid[0, 0].generate_dlod_table((Direction)i, triangle_limit);
-            grid[0, size].generate_dlod_table((Direction)i, triangle_limit);
-            grid[size, 0].generate_dlod_table((Direction)i, triangle_limit);
-            grid[size, size].generate_dlod_table((Direction)i, triangle_limit);
-            grid[0, size / 2].generate_dlod_table((Direction)i, triangle_limit);
-            grid[size, size / 2].generate_dlod_table((Direction)i, triangle_limit);
-            grid[size / 2, 0].generate_dlod_table((Direction)i, triangle_limit);
-            grid[size / 2, size].generate_dlod_table((Direction)i, triangle_limit);
-            grid[size / 2, size / 2].generate_dlod_table((Direction)i, triangle_limit);
+            grid[0, 0].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[0, size].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[size, 0].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[size, size].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[0, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[size, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[size / 2, 0].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[size / 2, size].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[size / 2, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height);
         }
 
         is_initialized = true;
@@ -63,6 +65,7 @@ public class SceneGrid : MonoBehaviour {
         bool south = false;
         bool west = false;
         int counter = 0;
+
         while ((!north || !east || !south || !west) && counter < 100) {
             north = true;
             east = true;
@@ -123,7 +126,6 @@ public class SceneGrid : MonoBehaviour {
                                 int new_z = z + ((prev_z - z) / 2);
                                 grid[x, new_z].add_frustums();
                                 south = false;
-                                Debug.Log("YES!2 SOUTH! :D");
                             }
                         }
 
@@ -145,7 +147,6 @@ public class SceneGrid : MonoBehaviour {
                                 int new_x = x + ((prev_x - x) / 2);
                                 grid[new_x, z].add_frustums();
                                 west = false;
-                                Debug.Log("YES!2");
                             }
                         }
 
