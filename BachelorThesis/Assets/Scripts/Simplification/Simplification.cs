@@ -51,7 +51,6 @@ public class Simplification : MonoBehaviour
 
     #region Private Variables
     private List<RenderingTarget> _scene_objects;
-    private int _counter = 0;
     #endregion
 
     #region Public Variables

@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f690e8dc50b760445a9bdd3232d2b269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spline: {fileID: 0}
+  spline: {fileID: 1183234733}
   frequency: 7
   lookForward: 1
   point_array:
@@ -332,14 +332,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   points:
-  - {x: 1, y: 0, z: 0}
-  - {x: 2, y: 0, z: 0}
-  - {x: 3, y: 0, z: 0}
-  - {x: 4, y: 0, z: 0}
+  - {x: 0.7842121, y: 0, z: -0.5412479}
+  - {x: 0.4236889, y: 0, z: -5.0483727}
+  - {x: 7.2352657, y: 0, z: -5.4095683}
+  - {x: 7.514448, y: 0, z: -1.0653381}
+  - {x: 8.038251, y: 0, z: 3.7028055}
+  - {x: 0.8601785, y: 0, z: 3.9741914}
+  - {x: 0.7842121, y: 0, z: -0.5412479}
   force_Y: 0
   _forced_Y: 0
-  _loop: 0
-  _initialized: 0
+  _loop: 1
+  _initialized: 1
+  _modes: 000000000000000000000000
 --- !u!4 &1183234734
 Transform:
   m_ObjectHideFlags: 0
