@@ -15,36 +15,17 @@ public class CameraPath : MonoBehaviour
     #endregion
 
     #region Public Functions
-    public void create_decoration()
+    public void update()
     {
-        //if (frequency <= 0 || items == null || items.Length == 0)
-        //{
-        //    return;
-        //}
-        //float stepSize = frequency * items.Length;
-        //if (spline.loop || stepSize == 1)
-        //{
-        //    stepSize = 1f / stepSize;
-        //}
-        //else
-        //{
-        //    stepSize = 1f / (stepSize - 1);
-        //}
+        point_array = GetComponentsInChildren<Transform>();
+    }
 
-        //for (int p = 0, f = 0; f < frequency; f++)
-        //{
-        //    for (int i = 0; i < items.Length; i++, p++)
-        //    {
-        //        Transform item = Instantiate(items[i]) as Transform;
-        //        Vector3 position = spline.get_point(p * stepSize);
-        //        item.transform.localPosition = position;
-        //        if (lookForward)
-        //        {
-        //            item.transform.LookAt(position + spline.get_direction(p * stepSize));
-        //        }
-        //        item.transform.parent = transform;
-        //    }
-        //}
+    public void clear()
+    {
+        while (transform.childCount != 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
     }
 
     public void generate_points()
@@ -63,27 +44,18 @@ public class CameraPath : MonoBehaviour
             stepSize = 1f / (stepSize - 1);
         }
 
-        for (int p = 0, f = 0; f < frequency; f++)
+        for (int f = 0; f < frequency; f++)
         {
-            Vector3 position = spline.get_point(p * stepSize);
+            Vector3 position = spline.get_point(f * stepSize);
 
-            GameObject go = new GameObject("Point");
+            GameObject go = new GameObject("Point_" + f);
             go.transform.localPosition = position;
             if (lookForward)
             {
-                go.transform.LookAt(position + spline.get_direction(p * stepSize));
+                go.transform.LookAt(position + spline.get_direction(f * stepSize));
             }
             go.transform.parent = transform;
-            p++;
         }
-    }
-    #endregion
-
-    #region Private Functions
-
-    private void Awake()
-    {
-
     }
     #endregion
 }
