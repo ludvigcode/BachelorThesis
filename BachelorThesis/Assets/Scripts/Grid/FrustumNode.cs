@@ -24,7 +24,6 @@ public class FrustumNode : MonoBehaviour {
 
     public int calc_triangles() {
         DLODGroup[] dlods = _get_dlods_within_frustum();
-        
         int num_vertices = 0;
         foreach (DLODGroup dlod in dlods) {
             if (!dlod.is_culled()) {

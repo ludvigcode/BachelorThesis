@@ -1,5 +1,0 @@
-Root {
-    hej = 23;
-    hejsan = vec3(23, 45, 2);
-
-}
