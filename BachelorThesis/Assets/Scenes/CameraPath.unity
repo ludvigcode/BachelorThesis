@@ -333,13 +333,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   points:
   - {x: 1, y: 0, z: 0}
-  - {x: -3.110879, y: 0, z: 0.9396038}
-  - {x: -4.199814, y: 0, z: 8.822572}
-  - {x: 2.735649, y: 0, z: 9.2289095}
-  - {x: 7.4792166, y: 0, z: 8.242831}
-  - {x: 6, y: 2.6692905, z: 0}
-  - {x: 1, y: 0, z: 0}
-  _loop: 1
+  - {x: 2, y: 0, z: 0}
+  - {x: 3, y: 0, z: 0}
+  - {x: 4, y: 0, z: 0}
+  _loop: 0
 --- !u!4 &1183234734
 Transform:
   m_ObjectHideFlags: 0

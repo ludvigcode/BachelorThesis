@@ -20,6 +20,7 @@ public class CameraPathEditor : Editor
         CameraPath cp = (CameraPath)target;
 
         cp.frequency = EditorGUILayout.IntField("Points", cp.frequency);
+        cp.lookForward = EditorGUILayout.Toggle("Look Forward", cp.lookForward);
         cp.spline = (BezierSpline)EditorGUILayout.ObjectField("Spline", cp.spline, typeof(BezierSpline), true);
 
         handle_size = EditorGUILayout.FloatField("Handle Size", handle_size);

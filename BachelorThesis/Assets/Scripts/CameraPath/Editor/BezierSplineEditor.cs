@@ -45,6 +45,10 @@ public class BezierSplineEditor : Editor
         {
             _draw_selected_point_inspector();
         }
+        if (GUILayout.Button("Init"))
+        {
+            _spline.init();
+        }
         if (GUILayout.Button("Add Curve"))
         {
             Undo.RecordObject(_spline, "Add Curve");
@@ -59,6 +63,11 @@ public class BezierSplineEditor : Editor
     private void OnSceneGUI()
     {
         _spline = target as BezierSpline;
+        if (!_spline.is_initialized())
+        {
+            return;
+        }
+
         _handle_transform = _spline.transform;
         _handle_rotation = Tools.pivotRotation == PivotRotation.Local ? _handle_transform.rotation : Quaternion.identity;
 

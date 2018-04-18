@@ -13,11 +13,35 @@ public class BezierSpline : MonoBehaviour
     #region Private Variables
     [SerializeField]
     private bool _loop;
+    private bool initialized = false;
 
     private BezierControlPointMode[] _modes;
     #endregion
 
     #region Public Functions
+    public void init()
+    {
+        points = new Vector3[]
+        {
+            new Vector3(1f, 0f, 0f),
+            new Vector3(2f, 0f, 0f),
+            new Vector3(3f, 0f, 0f),
+            new Vector3(4f, 0f, 0f)
+        };
+        _modes = new BezierControlPointMode[]
+        {
+            BezierControlPointMode.Free,
+            BezierControlPointMode.Free
+        };
+
+        initialized = true;
+    }
+
+    public bool is_initialized()
+    {
+        return initialized;
+    }
+
     public bool loop
     {
         get
@@ -164,6 +188,11 @@ public class BezierSpline : MonoBehaviour
 
     public void add_curve()
     {
+        if (!initialized)
+        {
+            Debug.Log("Spline must be initialized before adding curves!");
+            return;
+        }
         Vector3 point = points[points.Length - 1];
         Array.Resize(ref points, points.Length + 3);
         point.x += 1.0f;
