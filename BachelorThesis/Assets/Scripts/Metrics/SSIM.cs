@@ -5,30 +5,25 @@ using System.Runtime.InteropServices;
 using System.IO;
 using UnityEngine;
 
-public static class SSIM
-{
+public static class SSIM {
     #region Public Methods
     // To be used for comparing stored images.
-    public static float compute_mssim_string(string imgpath1, string imgpath2)
-    {
+    public static float compute_mssim_string(string imgpath1, string imgpath2) {
         // Adds the application data path which leads to the project's asset folder.
         string path1 = Application.dataPath + "/" + imgpath1;
         string path2 = Application.dataPath + "/" + imgpath2;
 
         // Does any of the images exist?
-        if (File.Exists(path1) && File.Exists(path2))
-        {
+        if (File.Exists(path1) && File.Exists(path2)) {
             return OpenCVInterop.mssim_string(path1, path2);
-        }
-        else
-        {
+        } else {
             Debug.Log("Could not find the following image paths:\n" + path1 + "\n" + path2);
             return -1.0f;
         }
     }
 
     public static float compute_mssim_textures(Texture2D reference, Texture2D image, int width, int height) {
-        return compute_mssim_byte(reference.EncodeToPNG(), reference.EncodeToPNG(), width, height);
+        return compute_mssim_byte(reference.EncodeToPNG(), image.EncodeToPNG(), width, height);
     }
 
     // To be used when comparing screenshots in run-time.

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FrustumNode : MonoBehaviour {
     public Camera frustum = null;
+    public DLODTable table = null;
     public GridNode parent = null;
     public FrustumNode next_node = null;
     public FrustumNode prev_node = null;
@@ -22,15 +23,14 @@ public class FrustumNode : MonoBehaviour {
     }
 
     public int calc_triangles() {
-        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(frustum);
-
         DLODGroup[] dlods = _get_dlods_within_frustum();
         
         int num_vertices = 0;
-
         foreach (DLODGroup dlod in dlods) {
-            MeshFilter mesh_filter = dlod.dlods[0].GetComponent<MeshFilter>();
-            num_vertices += mesh_filter.sharedMesh.triangles.Length;
+            if (!dlod.is_culled()) {
+                num_vertices += dlod.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3;
+                
+            }
         }
 
         return num_vertices;
@@ -46,13 +46,15 @@ public class FrustumNode : MonoBehaviour {
             dlod.set_to_original();
         }
 
-        Texture2D reference = _take_screen_shoot(width, height);
         int triangles = calc_triangles();
 
         while (triangles > max_triangles) {
+            Texture2D reference = _take_screen_shoot(width, height);
+
             Pair<DLODGroup, float>[] dlod_ssim = new Pair<DLODGroup, float>[dlods.Length];
             for (int i = 0; i < dlods.Length; ++i) {
                 dlod_ssim[i] = new Pair<DLODGroup, float>(dlods[i], 1.0f);
+
             }
 
             foreach (Pair<DLODGroup, float> dlod in dlod_ssim) {
@@ -64,25 +66,46 @@ public class FrustumNode : MonoBehaviour {
 
                 Texture2D tex = _take_screen_shoot(width, height);
                 float mssim = SSIM.compute_mssim_textures(reference, tex, width, height);
-                float lowered_triangles = dlod.first.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3.0f;
+                float lowered_triangles = 0.0f;
+                if (!dlod.first.is_culled()) {
+                    lowered_triangles = dlod.first.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3.0f;
+                }
+
                 dlod.first.try_to_higher();
                 float higered_triangles = dlod.first.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3.0f;
                 float triangle_value = 1 - (lowered_triangles / higered_triangles);
-                dlod.second = (mssim + triangle_value) / 2.0f;
+                dlod.second = mssim;
             }
 
+            int index = -1;
+            float val = 0.0f;
             for (int i = 0; i < dlods.Length; ++i) {
-
+                if (dlod_ssim[i].second > val) {
+                    index = i;
+                    val = dlod_ssim[i].second;
+                    Debug.Log("HELLo2 ... " + index);
+                }
             }
 
-
-            triangles = calc_triangles();
-
-            // TMP.
-            break;
+            if (index >= 0) {
+                if (dlod_ssim[index].first.try_to_lower()) {
+                    triangles = calc_triangles();
+                    Debug.Log("funkar");
+                }
+            }
         }
 
+        table = GetComponent<DLODTable>();
+        if (!table) {
+            table = gameObject.AddComponent<DLODTable>();
+        }
 
+        foreach (DLODGroup dlod in dlods) {
+            table.push_back(dlod, dlod.get_active_version());
+            dlod.set_to_original();
+        }
+
+        triangles = calc_triangles();
     }
 
     private Texture2D _take_screen_shoot(int width, int height) {

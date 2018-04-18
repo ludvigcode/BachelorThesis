@@ -6,8 +6,20 @@ public class DLODGroup : MonoBehaviour {
     public List<GameObject> dlods;
     private int active_version = -1;
 
+    public int get_active_version() {
+        return active_version;
+    }
+
     public int num_dlod_versions() {
         return dlods.Count;
+    }
+
+    public bool is_culled() {
+        if (active_version == -1) {
+            return true;
+        }
+
+        return false;
     }
 
     public MeshFilter get_active_dlod_mesh_filter() {
@@ -25,11 +37,11 @@ public class DLODGroup : MonoBehaviour {
 
         int version = active_version + 1;
 
-        if (version > dlods.Count - 1) {
+        if (version > dlods.Count) {
             return false;
         }
 
-        if (version == dlods.Count - 1) {
+        if (version == dlods.Count) {
             dlods[active_version].SetActive(false);
             active_version = -1;
             return true;
@@ -53,14 +65,14 @@ public class DLODGroup : MonoBehaviour {
 
         version -= 1;
 
-        if (version < 0) {
-            return false;
+        if (version >= 0) {
+            dlods[active_version].SetActive(false);
+            dlods[version].SetActive(true);
+            active_version = version;
+            return true;
         }
 
-        dlods[active_version].SetActive(false);
-        dlods[version].SetActive(true);
-        active_version = version;
-        return true;
+        return false;
     }
 
     public void set_to_original() {
@@ -68,12 +80,8 @@ public class DLODGroup : MonoBehaviour {
             return;
         }
 
-        if (active_version == 0) {
-            return;
-        }
-
-        if (active_version != -1) {
-            dlods[active_version].SetActive(false);
+        for (int i = 1; i < dlods.Count; ++i) {
+            dlods[i].SetActive(false);
         }
 
         dlods[0].SetActive(true);
