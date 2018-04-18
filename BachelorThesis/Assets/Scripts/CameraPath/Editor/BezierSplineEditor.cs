@@ -35,11 +35,13 @@ public class BezierSplineEditor : Editor
         _spline = target as BezierSpline;
         EditorGUI.BeginChangeCheck();
         bool loop = EditorGUILayout.Toggle("Loop", _spline.loop);
+        bool force = EditorGUILayout.Toggle("Force Y", _spline.force_Y);
         if (EditorGUI.EndChangeCheck())
         {
             Undo.RecordObject(_spline, "Toggle Loop");
             EditorUtility.SetDirty(_spline);
             _spline.loop = loop;
+            _spline.force_Y = force;
         }
         if (_selected_index >= 0 && _selected_index < _spline.control_point_count)
         {
@@ -48,6 +50,14 @@ public class BezierSplineEditor : Editor
         if (GUILayout.Button("Init"))
         {
             _spline.init();
+        }
+        if (_spline.force_Y)
+        {
+            _spline._forced_Y = EditorGUILayout.FloatField("Y Translation", _spline._forced_Y);
+            if (GUILayout.Button("Force Y Translation"))
+            {
+                _spline.force_y_translation();
+            }
         }
         if (GUILayout.Button("Add Curve"))
         {

@@ -47,7 +47,6 @@ public class CameraPath : MonoBehaviour
         for (int f = 0; f < frequency; f++)
         {
             Vector3 position = spline.get_point(f * stepSize);
-
             GameObject go = new GameObject("Point_" + f);
             go.transform.localPosition = position;
             if (lookForward)

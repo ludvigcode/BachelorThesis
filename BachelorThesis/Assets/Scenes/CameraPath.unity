@@ -140,9 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f690e8dc50b760445a9bdd3232d2b269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spline: {fileID: 1183234733}
+  spline: {fileID: 0}
   frequency: 7
-  lookForward: 0
+  lookForward: 1
   point_array:
   - {fileID: 156736482}
 --- !u!4 &156736482
@@ -336,15 +336,18 @@ MonoBehaviour:
   - {x: 2, y: 0, z: 0}
   - {x: 3, y: 0, z: 0}
   - {x: 4, y: 0, z: 0}
+  force_Y: 0
+  _forced_Y: 0
   _loop: 0
+  _initialized: 0
 --- !u!4 &1183234734
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1183234732}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.331643, y: -2.8884192, z: 8.79}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

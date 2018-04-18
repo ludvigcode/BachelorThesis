@@ -49,9 +49,11 @@ public class CameraPathEditor : Editor
         for (int i = 1; i < cp.point_array.Length; i++)
         {
             Vector3 pos = cp.point_array[i].position;
+            Quaternion rot = cp.point_array[i].rotation;
             Vector3 scale;
             scale.x = scale.y = scale.z = handle_size;
             Handles.DrawWireCube(pos, scale);
+            Handles.ArrowHandleCap(0, pos, rot, handle_size, EventType.Repaint);
             pos.y += handle_size + 1.0f;
             Handles.Label(pos, "" + i, _style);
         }

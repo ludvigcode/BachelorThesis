@@ -6,15 +6,19 @@ using UnityEngine;
 public class BezierSpline : MonoBehaviour
 {
     #region Public Variables
-    [SerializeField]
     public Vector3[] points;
+    public bool force_Y = false;
+    public float _forced_Y = 0f;
     #endregion
 
     #region Private Variables
     [SerializeField]
     private bool _loop;
-    private bool initialized = false;
 
+    [SerializeField]
+    private bool _initialized = false;
+
+    [SerializeField]
     private BezierControlPointMode[] _modes;
     #endregion
 
@@ -34,12 +38,12 @@ public class BezierSpline : MonoBehaviour
             BezierControlPointMode.Free
         };
 
-        initialized = true;
+        _initialized = true;
     }
 
     public bool is_initialized()
     {
-        return initialized;
+        return _initialized;
     }
 
     public bool loop
@@ -57,6 +61,21 @@ public class BezierSpline : MonoBehaviour
                 set_control_point(0, points[0]);
             }
         }
+    }
+
+    public void force_y_translation()
+    {
+        if (!_initialized)
+        {
+            Debug.Log("Spline must be initialized before any translation can be forced!");
+            return;
+        }
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            points[i].y = _forced_Y;
+        }
+
     }
 
     public BezierControlPointMode get_control_point_mode(int index)
@@ -102,13 +121,13 @@ public class BezierSpline : MonoBehaviour
             Vector3 delta = point - points[index];
             if (_loop)
             {
-                if(index == 0)
+                if (index == 0)
                 {
                     points[1] += delta;
                     points[points.Length - 2] += delta;
                     points[points.Length - 1] = point;
                 }
-                else if(index == points.Length - 1)
+                else if (index == points.Length - 1)
                 {
                     points[0] = point;
                     points[1] += delta;
@@ -188,7 +207,7 @@ public class BezierSpline : MonoBehaviour
 
     public void add_curve()
     {
-        if (!initialized)
+        if (!_initialized)
         {
             Debug.Log("Spline must be initialized before adding curves!");
             return;
@@ -247,12 +266,12 @@ public class BezierSpline : MonoBehaviour
         if (index <= middleIndex)
         {
             fixedIndex = middleIndex - 1;
-            if(fixedIndex < 0)
+            if (fixedIndex < 0)
             {
                 fixedIndex = points.Length - 2;
             }
             enforcedIndex = middleIndex + 1;
-            if(enforcedIndex >= points.Length)
+            if (enforcedIndex >= points.Length)
             {
                 enforcedIndex = 1;
             }
@@ -260,12 +279,12 @@ public class BezierSpline : MonoBehaviour
         else
         {
             fixedIndex = middleIndex + 1;
-            if(fixedIndex >= points.Length)
+            if (fixedIndex >= points.Length)
             {
                 fixedIndex = 1;
             }
             enforcedIndex = middleIndex - 1;
-            if(enforcedIndex < 0)
+            if (enforcedIndex < 0)
             {
                 enforcedIndex = points.Length - 2;
             }
