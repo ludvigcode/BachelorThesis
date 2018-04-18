@@ -23,9 +23,13 @@ public class ScreenCapturer : MonoBehaviour {
     #endregion
 
     #region Public Functions
-    public byte[] capture_screenshot() {
+
+
+    public byte[] capture_screenshot()
+    {
         // Create screenshot objects if necessary.
-        if (!_render_texture) {
+        if (_render_texture == null)
+        {
             // creates off-screen render texture that can rendered into.
             _rect = new Rect(0, 0, capture_width, capture_height);
             _render_texture = new RenderTexture(capture_width, capture_height, 24);
@@ -37,30 +41,41 @@ public class ScreenCapturer : MonoBehaviour {
         _main_camera.Render();
 
         // read pixels will read from the currently active render texture so make our offscreen 
-        // render texture active and then read the pixels
+        // render texture active and then read the pixels.
         RenderTexture.active = _render_texture;
         _screenshot.ReadPixels(_rect, 0, 0);
 
-        // reset active camera texture and render texture
+        // reset active camera texture and render texture.
         _main_camera.targetTexture = null;
         RenderTexture.active = null;
 
-        byte[] file_data = null;
-        file_data = _screenshot.EncodeToJPG();
+        byte[] fileData = null;
+        fileData = _screenshot.EncodeToJPG();
 
-        // Cleanup if needed.
-        if (optimize == false) {
+        // cleanup if needed.
+        if (optimize == false)
+        {
             Destroy(_render_texture);
             _render_texture = null;
             _screenshot = null;
         }
 
-        return file_data;
+        return fileData;
     }
     #endregion
 
     #region Private Functions
-    private void Start() {
+
+    #endregion
+    private void Start()
+    {
+        String currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+        String dllPath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "Assets" + Path.DirectorySeparatorChar + "Plugins";
+        if (currentPath.Contains(dllPath) == false)
+        {
+            Environment.SetEnvironmentVariable("PATH", currentPath + Path.PathSeparator + dllPath, EnvironmentVariableTarget.Process);
+        }
+
         _main_camera = Camera.main;
         byte[] image1 = capture_screenshot();
         obj.SetActive(false);
@@ -68,5 +83,8 @@ public class ScreenCapturer : MonoBehaviour {
         float index = SSIM.compute_mssim_byte(image1, image2, capture_width, capture_height);
         Debug.Log("MSSIM: " + index);
     }
-    #endregion
+
+    void Update () {
+
+    }
 }

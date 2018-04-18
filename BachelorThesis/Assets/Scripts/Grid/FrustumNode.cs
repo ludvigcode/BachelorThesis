@@ -19,7 +19,7 @@ public class FrustumNode : MonoBehaviour {
         frustum.farClipPlane = 100.0f;
     }
 
-    public int calc_triangles() {
+    public int calc_vertices() {
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(frustum);
 
         DLODGroup[] dlods = FindObjectsOfType<DLODGroup>();
@@ -38,24 +38,5 @@ public class FrustumNode : MonoBehaviour {
         }
 
         return num_vertices;
-    }
-
-    public void generate_dlod_table(int max_triangles, int width, int height) {
-        RenderTexture tex = new RenderTexture(width, height, 16);
-        Texture2D screen_shot = new Texture2D(width, height, TextureFormat.RGB24, false);
-
-        frustum.targetTexture = tex;
-        frustum.Render();
-
-        RenderTexture.active = tex;
-
-        screen_shot.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-
-        RenderTexture.active = null;
-        frustum.targetTexture = null;
-        DestroyImmediate(tex);
-
-        byte[] bytes = screen_shot.EncodeToPNG();
-        // System.IO.File.WriteAllBytes("C:/Users/BTH/Documents/GitHub/lol.png", bytes);
     }
 }
