@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneGrid : MonoBehaviour {
+    public bool save_images = false;
+    public string folderpath = "";
     public int triangle_limit = 1000;
     public int size = 10;
     public float spread = 10.0f;
@@ -41,36 +43,18 @@ public class SceneGrid : MonoBehaviour {
         grid[size / 2, size].add_frustums();
         grid[size / 2, size / 2].add_frustums();
 
-        for (int x = 0; x <= size; ++x) {
-            int prev_z = -1;
-            int prev_num_vertices = -1;
-            for (int z = 0; z <= size; ++z) {
-                int vertices = (grid[x, z].get_num_vertices(Direction.NORTH));
-                if (vertices > 0) {
-                    if (prev_num_vertices != -1) {
-                        float diff = prev_num_vertices / vertices;
-                        if (diff < 0.5f || diff > 2.0f) {
-                            int new_z = prev_z + ((z - prev_z) / 2);
-
-
-                            grid[x, new_z].add_frustums();
-                            Debug.Log(new_z);
-                        }
-                    }
-
-                    prev_z = z;
-                    prev_num_vertices = vertices;
-                }
-            }
+        for (int i = 0; i < 4; ++i) {
+            grid[0, 0].add_frustums();
+            grid[0, size].se();
+            grid[size, 0].add_frustums();
+            grid[size, size].add_frustums();
+            grid[0, size / 2].add_frustums();
+            grid[size, size / 2].add_frustums();
+            grid[size / 2, 0].add_frustums();
+            grid[size / 2, size].add_frustums();
+            grid[size / 2, size / 2].add_frustums();
         }
 
-        for (int x = 0; x <= size; ++x) {
-            int prev_z = -1;
-            int prev_num_vertices = -1;
-            for (int z = size; z <= 0; --z) {
-                //Debug.Log(grid[x, z].get_num_vertices(Direction.SOUTH));
-            }
-        }
 
         is_initialized = true;
     }
