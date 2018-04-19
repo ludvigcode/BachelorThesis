@@ -10,7 +10,10 @@ public enum Direction {
 }
 
 public class GridNode : MonoBehaviour {
-    private FrustumNode[] _frustums = null;
+    private FrustumNode north = null;
+    private FrustumNode east = null;
+    private FrustumNode south = null;
+    private FrustumNode west = null;
 
     public void add_frustums() {
         add_frustum(Direction.NORTH);
@@ -20,83 +23,117 @@ public class GridNode : MonoBehaviour {
     }
 
     public void add_frustum(Direction dir) {
-        if (_frustums == null) {
-            _frustums = new FrustumNode[4];
-            for (int i = 0; i < 4; ++i) {
-                _frustums[i] = null;
-            }
+        if (dir == Direction.NORTH && !north) {
+            GameObject obj = new GameObject();
+            north = obj.AddComponent<FrustumNode>();
+            north.init(this, 0.0f);
+            return;
         }
 
-        if (!_frustums[(int)dir]) {
+        if (dir == Direction.EAST && !east) {
             GameObject obj = new GameObject();
-            _frustums[(int)dir] = obj.AddComponent<FrustumNode>();
-            switch (dir) {
-                case Direction.NORTH:
-                    obj.name = gameObject.name + "_north";
-                    _frustums[(int)dir].init(this, 0.0f);
-                    break;
-                case Direction.EAST:
-                    obj.name = gameObject.name + "_east";
-                    _frustums[(int)dir].init(this, 90.0f);
-                    break;
-                case Direction.SOUTH:
-                    obj.name = gameObject.name + "_south";
-                    _frustums[(int)dir].init(this, 180.0f);
-                    break;
-                case Direction.WEST:
-                    obj.name = gameObject.name + "_west";
-                    _frustums[(int)dir].init(this, 270.0f);
-                    break;
-                default:
-                    break;
-            }
+            east = obj.AddComponent<FrustumNode>();
+            east.init(this, 90.0f);
+            return;
+        }
+
+        if (dir == Direction.SOUTH && !south) {
+            GameObject obj = new GameObject();
+            south = obj.AddComponent<FrustumNode>();
+            south.init(this, 180.0f);
+            return;
+        }
+
+        if (dir == Direction.WEST && !west) {
+            GameObject obj = new GameObject();
+            west = obj.AddComponent<FrustumNode>();
+            west.init(this, 270.0f);
+            return;
         }
     }
 
     public FrustumNode get_frustum(Direction dir) {
-        if (_frustums != null) {
-            return _frustums[(int)dir];
+        if (dir == Direction.NORTH && north) {
+            return north;
+        }
+
+        if (dir == Direction.EAST && east) {
+            return east;
+        }
+
+        if (dir == Direction.SOUTH && south) {
+            return south;
+        }
+
+        if (dir == Direction.WEST && west) {
+            return west;
         }
 
         return null;
     }
 
     public bool has_frustum(Direction dir) {
-        if (_frustums != null) {
-            if (_frustums[(int)dir]) {
-                return true;
-            }
+        if (dir == Direction.NORTH && north) {
+            return true;
+        }
+
+        if (dir == Direction.EAST && east) {
+            return true;
+        }
+
+        if (dir == Direction.SOUTH && south) {
+            return true;
+        }
+
+        if (dir == Direction.WEST && west) {
+            return true;
         }
 
         return false;
     }
 
     public void set_next_frustum(Direction dir, GridNode node) {
-        if (_frustums != null) {
-            if (_frustums[(int)dir]) {
-                if (node._frustums[(int)dir]) {
-                    _frustums[(int)dir].next_node = node._frustums[(int)dir];
-                    node._frustums[(int)dir].prev_node = _frustums[(int)dir];
-                }
-            }
+        if (dir == Direction.NORTH && north) {
+            north.next_node = node.north;
+            node.north.prev_node = north;
+            return;
         }
-    }
 
-    public void generate_dlod_table(Direction dir, int max_triangles, int width, int height, bool save_file, string folderpath) {
-        if (_frustums != null) {
-            if (_frustums[(int)dir]) {
-                _frustums[(int)dir].generate_dlod_table(max_triangles, width, height, save_file, folderpath);
-            }
+        if (dir == Direction.EAST && east) {
+            east.next_node = node.east;
+            node.east.prev_node = east;
+            return;
+        }
+
+        if (dir == Direction.SOUTH && south) {
+            south.next_node = node.south;
+            node.south.prev_node = south;
+            return;
+        }
+
+        if (dir == Direction.WEST && west) {
+            west.next_node = node.west;
+            node.west.prev_node = west;
+            return;
         }
     }
 
     public int get_num_vertices(Direction dir) {
-        if (_frustums != null) {
-            if (_frustums[(int)dir]) {
-                return _frustums[(int)dir].calc_triangles();
-            }
+        if (dir == Direction.NORTH && north) {
+            return north.calc_triangles();
         }
 
+        if (dir == Direction.EAST && east) {
+            return east.calc_triangles();
+        }
+
+        if (dir == Direction.SOUTH && south) {
+            return south.calc_triangles();
+        }
+
+        if (dir == Direction.WEST && west) {
+            return west.calc_triangles();
+        }
         return -1;
     }
 }
