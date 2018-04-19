@@ -32,21 +32,24 @@ public class GridNode : MonoBehaviour {
             _frustums[(int)dir] = obj.AddComponent<FrustumNode>();
             switch (dir) {
                 case Direction.NORTH:
+                    obj.name = gameObject.name + "_north";
                     _frustums[(int)dir].init(this, 0.0f);
                     break;
                 case Direction.EAST:
+                    obj.name = gameObject.name + "_east";
                     _frustums[(int)dir].init(this, 90.0f);
                     break;
                 case Direction.SOUTH:
+                    obj.name = gameObject.name + "_south";
                     _frustums[(int)dir].init(this, 180.0f);
                     break;
                 case Direction.WEST:
+                    obj.name = gameObject.name + "_west";
                     _frustums[(int)dir].init(this, 270.0f);
                     break;
                 default:
                     break;
             }
-            return;
         }
     }
 
@@ -79,10 +82,10 @@ public class GridNode : MonoBehaviour {
         }
     }
 
-    public void generate_dlod_table(Direction dir, int max_triangles, int width, int height) {
+    public void generate_dlod_table(Direction dir, int max_triangles, int width, int height, bool save_file, string folderpath) {
         if (_frustums != null) {
             if (_frustums[(int)dir]) {
-                _frustums[(int)dir].generate_dlod_table(max_triangles, width, height);
+                _frustums[(int)dir].generate_dlod_table(max_triangles, width, height, save_file, folderpath);
             }
         }
     }

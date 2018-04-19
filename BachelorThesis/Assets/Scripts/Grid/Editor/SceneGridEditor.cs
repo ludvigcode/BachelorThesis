@@ -16,7 +16,7 @@ public class SceneGridEditor : Editor {
 
         EditorGUILayout.Space();
 
-        EditorGUILayout.LabelField("Sampling", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Rendering", EditorStyles.boldLabel);
         sg.triangle_limit = EditorGUILayout.IntField("Triangle Limit", sg.triangle_limit);
         sg.width = EditorGUILayout.IntField("Texture Width", sg.width);
         sg.height = EditorGUILayout.IntField("Texture Height", sg.height);
