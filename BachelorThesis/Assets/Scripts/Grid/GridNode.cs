@@ -79,10 +79,10 @@ public class GridNode : MonoBehaviour {
         }
     }
 
-    public void generate_dlod_table(Direction dir, int max_triangles, int width, int height) {
+    public void generate_dlod_table(Direction dir, int max_triangles, int width, int height, bool save_file, string folderpath) {
         if (_frustums != null) {
             if (_frustums[(int)dir]) {
-                _frustums[(int)dir].generate_dlod_table(max_triangles, width, height);
+                _frustums[(int)dir].generate_dlod_table(max_triangles, width, height, save_file, folderpath);
             }
         }
     }

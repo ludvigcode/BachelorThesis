@@ -47,15 +47,15 @@ public class SceneGrid : MonoBehaviour {
         grid[size / 2, size / 2].add_frustums();
 
         for (int i = 0; i < 4; ++i) {
-            grid[0, 0].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[0, size].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[size, 0].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[size, size].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[0, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[size, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[size / 2, 0].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[size / 2, size].generate_dlod_table((Direction)i, triangle_limit, width, height);
-            grid[size / 2, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height);
+            grid[0, 0].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[0, size].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[size, 0].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[size, size].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[0, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[size, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[size / 2, 0].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[size / 2, size].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+            grid[size / 2, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
         }
 
         is_initialized = true;
