@@ -120,19 +120,19 @@ public class GridNode : MonoBehaviour {
 
     public int get_num_vertices(Direction dir) {
         if (dir == Direction.NORTH && north) {
-            return north.calc_vertices();
+            return north.calc_triangles();
         }
 
         if (dir == Direction.EAST && east) {
-            return east.calc_vertices();
+            return east.calc_triangles();
         }
 
         if (dir == Direction.SOUTH && south) {
-            return south.calc_vertices();
+            return south.calc_triangles();
         }
 
         if (dir == Direction.WEST && west) {
-            return west.calc_vertices();
+            return west.calc_triangles();
         }
         return -1;
     }
