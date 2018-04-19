@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class FrustumNode : MonoBehaviour {
         return num_vertices;
     }
 
-    public void generate_dlod_table(int max_triangles, int width, int height) {
+    public void generate_dlod_table(int max_triangles, int width, int height, bool save_file, string folderpath) {
         DLODGroup[] dlods = _get_dlods_within_frustum();
         if (dlods.Length == 0) {
             return;
@@ -47,6 +48,11 @@ public class FrustumNode : MonoBehaviour {
 
         int triangles = calc_triangles();
 
+        if (save_file) {
+            Directory.CreateDirectory(folderpath + "/" + gameObject.name);
+        }
+
+        int itr = 0;
         while (triangles > max_triangles) {
             Texture2D reference = _take_screen_shoot(width, height);
 
@@ -56,6 +62,13 @@ public class FrustumNode : MonoBehaviour {
 
             }
 
+            string folder_path = "";
+            if (save_file) {
+                folder_path = folderpath + "/" + gameObject.name + "/itr_" + itr.ToString();
+                Directory.CreateDirectory(folder_path);
+            }
+
+            int counter = 0;
             foreach (Pair<DLODGroup, float> dlod in dlod_ssim) {
                 // If false we, skip. The mesh will be culled.
                 if (!dlod.first.try_to_lower()) {
@@ -65,15 +78,26 @@ public class FrustumNode : MonoBehaviour {
 
                 Texture2D tex = _take_screen_shoot(width, height);
                 float mssim = SSIM.compute_mssim_textures(reference, tex, width, height);
-                float lowered_triangles = 0.0f;
-                if (!dlod.first.is_culled()) {
-                    lowered_triangles = dlod.first.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3.0f;
+                dlod.second = mssim;
+
+                if (save_file) {
+                    string dlod_table = "";
+                    dlod_table += "SSIM: " + mssim.ToString() + "\n\n";
+
+                    foreach (DLODGroup d in dlods) {
+                        dlod_table += d.gameObject.name;
+                        dlod_table += ": ";
+                        dlod_table += d.get_active_version().ToString();
+                        dlod_table += "\n";
+                    }
+
+                    File.WriteAllText(folder_path + "/" +  gameObject.name + "_itr_" + itr.ToString() + "_" + counter.ToString() + ".txt", dlod_table);
+                    File.WriteAllBytes(folder_path + "/" + gameObject.name + "_itr_" + itr.ToString() + "_" + counter.ToString() + ".png", tex.EncodeToPNG());
                 }
 
                 dlod.first.try_to_higher();
-                float higered_triangles = dlod.first.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3.0f;
-                float triangle_value = 1 - (lowered_triangles / higered_triangles);
-                dlod.second = mssim;
+
+                ++counter;
             }
 
             int index = -1;
@@ -82,21 +106,36 @@ public class FrustumNode : MonoBehaviour {
                 if (dlod_ssim[i].second > val) {
                     index = i;
                     val = dlod_ssim[i].second;
-                    Debug.Log("HELLo2 ... " + index);
                 }
             }
 
             if (index >= 0) {
                 if (dlod_ssim[index].first.try_to_lower()) {
                     triangles = calc_triangles();
-                    Debug.Log("funkar");
                 }
             }
+
+            ++itr;
         }
 
         table = GetComponent<DLODTable>();
         if (!table) {
             table = gameObject.AddComponent<DLODTable>();
+        }
+
+        if (save_file) {
+            string dlod_table = "";
+            foreach (DLODGroup d in dlods) {
+                dlod_table += d.gameObject.name;
+                dlod_table += ": ";
+                dlod_table += d.get_active_version().ToString();
+                dlod_table += "\n";
+            }
+
+            Texture2D tex = _take_screen_shoot(width, height);
+
+            File.WriteAllText(folderpath + "/" + gameObject.name + "/" + gameObject.name + "_golden.txt", dlod_table);
+            File.WriteAllBytes(folderpath + "/" + gameObject.name + "/" + gameObject.name + "_golden.png", tex.EncodeToPNG());
         }
 
         foreach (DLODGroup dlod in dlods) {
