@@ -8,9 +8,21 @@ public class SceneGridEditor : Editor {
     public override void OnInspectorGUI() {
         SceneGrid sg = (SceneGrid)target;
 
-        sg.triangle_limit = EditorGUILayout.IntField(sg.triangle_limit);
-        sg.size = EditorGUILayout.IntField(sg.size);
-        sg.spread = EditorGUILayout.FloatField(sg.spread);
+        sg.save_images = EditorGUILayout.Toggle("Save Images", sg.save_images);
+
+        if (sg.save_images) {
+            sg.folderpath = EditorGUILayout.TextField("Folderpath", sg.folderpath);
+        }
+
+        EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField("Sampling", EditorStyles.boldLabel);
+        sg.triangle_limit = EditorGUILayout.IntField("Triangle Limit", sg.triangle_limit);
+        sg.width = EditorGUILayout.IntField("Texture Width", sg.width);
+        sg.height = EditorGUILayout.IntField("Texture Height", sg.height);
+        sg.threshold = EditorGUILayout.FloatField("Subdivision Treshold", sg.threshold);
+
+        EditorGUILayout.Space();
 
         if (GUILayout.Button("Init")) {
             sg.init();
