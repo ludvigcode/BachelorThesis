@@ -48,8 +48,11 @@ public class FrustumNode : MonoBehaviour {
 
         int triangles = calc_triangles();
 
+        if (save_file) {
+            Directory.CreateDirectory(folderpath + "/" + gameObject.name);
+        }
 
-        int counter = 0;
+        int itr = 0;
         while (triangles > max_triangles) {
             Texture2D reference = _take_screen_shoot(width, height);
 
@@ -59,6 +62,13 @@ public class FrustumNode : MonoBehaviour {
 
             }
 
+            string folder_path = "";
+            if (save_file) {
+                folder_path = folderpath + "/" + gameObject.name + "/itr_" + itr.ToString();
+                Directory.CreateDirectory(folder_path);
+            }
+
+            int counter = 0;
             foreach (Pair<DLODGroup, float> dlod in dlod_ssim) {
                 // If false we, skip. The mesh will be culled.
                 if (!dlod.first.try_to_lower()) {
@@ -68,35 +78,24 @@ public class FrustumNode : MonoBehaviour {
 
                 Texture2D tex = _take_screen_shoot(width, height);
                 float mssim = SSIM.compute_mssim_textures(reference, tex, width, height);
-                float lowered_triangles = 0.0f;
-                if (!dlod.first.is_culled()) {
-                    lowered_triangles = dlod.first.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3.0f;
-                }
-
-                dlod.first.try_to_higher();
-                float higered_triangles = dlod.first.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3.0f;
-                float triangle_value = 1 - (lowered_triangles / higered_triangles);
                 dlod.second = mssim;
 
                 if (save_file) {
                     string dlod_table = "";
                     dlod_table += "SSIM: " + mssim.ToString() + "\n\n";
 
-                foreach (DLODGroup d in dlods) {
+                    foreach (DLODGroup d in dlods) {
                         dlod_table += d.gameObject.name;
                         dlod_table += ": ";
                         dlod_table += d.get_active_version().ToString();
                         dlod_table += "\n";
                     }
 
-                    folderpath += "/" + gameObject.name;
-
-                    Directory.CreateDirectory(folderpath);
-
-                    StreamWriter writer = new StreamWriter(folderpath + "/" + gameObject.name + "_" + counter.ToString() + ".txt", true);
-                    writer.WriteLine(dlod_table);
-                    writer.Close();
+                    File.WriteAllText(folder_path + "/" +  gameObject.name + "_itr_" + itr.ToString() + "_" + counter.ToString() + ".txt", dlod_table);
+                    File.WriteAllBytes(folder_path + "/" + gameObject.name + "_itr_" + itr.ToString() + "_" + counter.ToString() + ".png", tex.EncodeToPNG());
                 }
+
+                dlod.first.try_to_higher();
 
                 ++counter;
             }
@@ -115,11 +114,28 @@ public class FrustumNode : MonoBehaviour {
                     triangles = calc_triangles();
                 }
             }
+
+            ++itr;
         }
 
         table = GetComponent<DLODTable>();
         if (!table) {
             table = gameObject.AddComponent<DLODTable>();
+        }
+
+        if (save_file) {
+            string dlod_table = "";
+            foreach (DLODGroup d in dlods) {
+                dlod_table += d.gameObject.name;
+                dlod_table += ": ";
+                dlod_table += d.get_active_version().ToString();
+                dlod_table += "\n";
+            }
+
+            Texture2D tex = _take_screen_shoot(width, height);
+
+            File.WriteAllText(folderpath + "/" + gameObject.name + "/" + gameObject.name + "_golden.txt", dlod_table);
+            File.WriteAllBytes(folderpath + "/" + gameObject.name + "/" + gameObject.name + "_golden.png", tex.EncodeToPNG());
         }
 
         foreach (DLODGroup dlod in dlods) {
