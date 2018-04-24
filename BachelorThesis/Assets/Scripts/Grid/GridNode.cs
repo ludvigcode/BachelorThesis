@@ -10,6 +10,10 @@ public enum Direction {
 }
 
 public class GridNode : MonoBehaviour {
+
+    public static FrustumNode active_1 { get; private set; }
+    public static FrustumNode active_2 { get; private set; }
+
     private FrustumNode[] _frustums = null;
 
     public void add_frustums() {
@@ -50,6 +54,16 @@ public class GridNode : MonoBehaviour {
                 default:
                     break;
             }
+        }
+    }
+
+    public void apply_dlods(Direction dir_1, Direction dir_2) {
+        if (_frustums != null) {
+            _frustums[(int)dir_1].apply_dlod_table();
+            active_1 = _frustums[(int)dir_1];
+
+            _frustums[(int)dir_2].apply_dlod_table();
+            active_2 = _frustums[(int)dir_2];
         }
     }
 

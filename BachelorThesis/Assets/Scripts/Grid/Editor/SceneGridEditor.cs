@@ -5,6 +5,7 @@ using UnityEditor;
 
 [CustomEditor(typeof(SceneGrid))]
 public class SceneGridEditor : Editor {
+
     public override void OnInspectorGUI() {
         SceneGrid sg = (SceneGrid)target;
 
@@ -20,7 +21,6 @@ public class SceneGridEditor : Editor {
         sg.triangle_limit = EditorGUILayout.IntField("Triangle Limit", sg.triangle_limit);
         sg.width = EditorGUILayout.IntField("Texture Width", sg.width);
         sg.height = EditorGUILayout.IntField("Texture Height", sg.height);
-        sg.threshold = EditorGUILayout.FloatField("Subdivision Treshold", sg.threshold);
 
         EditorGUILayout.Space();
 

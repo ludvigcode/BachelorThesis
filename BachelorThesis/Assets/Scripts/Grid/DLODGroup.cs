@@ -97,7 +97,10 @@ public class DLODGroup : MonoBehaviour {
             dlods[active_version].SetActive(false);
         }
 
-        dlods[version].SetActive(true);
+        if (version != -1) {
+            dlods[version].SetActive(true);
+        }
+
         active_version = version;
     }
 }

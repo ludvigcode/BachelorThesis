@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneGrid : MonoBehaviour {
+
     public bool save_images = false;
     public string folderpath = null;
     public int triangle_limit = 1000;
@@ -10,7 +11,7 @@ public class SceneGrid : MonoBehaviour {
     public int height = 600;
     public int size = 10;
     public float spread = 10.0f;
-    public float threshold = 2.0f;
+    public float y_height = 2.0f;
     public GameObject grid_obj = null;
     public GridNode[,] grid;
 
@@ -33,132 +34,94 @@ public class SceneGrid : MonoBehaviour {
 
                 GridNode node = obj.AddComponent<GridNode>();
                 grid[x, z] = node;
+                grid[x, z].add_frustums();
             }
         }
 
-        grid[0, 0].add_frustums();
-        grid[0, size].add_frustums();
-        grid[size, 0].add_frustums();
-        grid[size, size].add_frustums();
-        grid[0, size / 2].add_frustums();
-        grid[size, size / 2].add_frustums();
-        grid[size / 2, 0].add_frustums();
-        grid[size / 2, size].add_frustums();
-        grid[size / 2, size / 2].add_frustums();
-
-        for (int i = 0; i < 4; ++i) {
-            grid[0, 0].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[0, size].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[size, 0].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[size, size].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[0, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[size, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[size / 2, 0].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[size / 2, size].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
-            grid[size / 2, size / 2].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+        for (int x = 0; x <= size; ++x) {
+            for (int z = 0; z <= size; ++z) {
+                for (int i = 0; i < 4; ++i) {
+                    grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+                }
+            }
         }
 
         is_initialized = true;
     }
 
-    public void subdivide() {
-        bool north = false;
-        bool east = false;
-        bool south = false;
-        bool west = false;
-        int counter = 0;
+    public void set_dlods(Camera camera) {
 
-        while ((!north || !east || !south || !west) && counter < 100) {
-            north = true;
-            east = true;
-            south = true;
-            west = true;
+        // Check direction.
+        float angle = Vector3.SignedAngle(camera.transform.forward, Vector3.forward, camera.transform.up);
+        if (Mathf.Abs(angle) <= 45.0f) {
 
-            for (int x = 0; x <= size; ++x) {
-                int prev_z = -1;
-                int prev_num_vertices = -1;
-                for (int z = 0; z <= size; ++z) {
-                    int vertices = grid[x, z].get_num_vertices(Direction.NORTH);
-                    if (vertices > 0) {
-                        if (prev_num_vertices != -1) {
-                            float diff = prev_num_vertices / vertices;
-                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
-                                int new_z = prev_z + ((z - prev_z) / 2);
-                                grid[x, new_z].add_frustums();
-                                north = false;
-                            }
-                        }
+            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
+            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
 
-                        prev_z = z;
-                        prev_num_vertices = vertices;
-                    }
-                }
+            if (angle > 0.0f) {
+                grid[x_pos, z_pos].apply_dlods(Direction.NORTH, Direction.EAST);
+            } else {
+                grid[x_pos, z_pos].apply_dlods(Direction.NORTH, Direction.WEST);
             }
 
-            for (int z = 0; z <= size; ++z) {
-                int prev_x = -1;
-                int prev_num_vertices = -1;
-                for (int x = 0; x <= size; ++x) {
-                    int vertices = grid[x, z].get_num_vertices(Direction.EAST);
-                    if (vertices > 0) {
-                        if (prev_num_vertices != -1) {
-                            float diff = prev_num_vertices / vertices;
-                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
-                                int new_x = prev_x + ((x - prev_x) / 2);
-                                grid[new_x, z].add_frustums();
-                                east = false;
-                            }
-                        }
+            return;
+        }
 
-                        prev_x = x;
-                        prev_num_vertices = vertices;
-                    }
-                }
+        angle = Vector3.SignedAngle(camera.transform.forward, Vector3.right, camera.transform.up);
+        if (Mathf.Abs(angle) <= 45.0f) {
+
+            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
+            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
+
+            if (angle > 0.0f) {
+                grid[x_pos, z_pos].apply_dlods(Direction.EAST, Direction.SOUTH);
+            } else {
+                grid[x_pos, z_pos].apply_dlods(Direction.EAST, Direction.NORTH);
             }
 
-            for (int x = 0; x <= size; ++x) {
-                int prev_z = -1;
-                int prev_num_vertices = -1;
-                for (int z = size; z >= 0; --z) {
-                    int vertices = grid[x, z].get_num_vertices(Direction.SOUTH);
-                    if (vertices > 0) {
-                        if (prev_num_vertices != -1) {
-                            float diff = prev_num_vertices / vertices;
-                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
-                                int new_z = z + ((prev_z - z) / 2);
-                                grid[x, new_z].add_frustums();
-                                south = false;
-                            }
-                        }
+            return;
+        }
 
-                        prev_z = z;
-                        prev_num_vertices = vertices;
-                    }
-                }
+        angle = Vector3.SignedAngle(camera.transform.forward, Vector3.back, camera.transform.up);
+        if (Mathf.Abs(angle) <= 45.0f) {
+
+            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
+            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
+
+            if (angle > 0.0f) {
+                grid[x_pos, z_pos].apply_dlods(Direction.SOUTH, Direction.EAST);
+            } else {
+                grid[x_pos, z_pos].apply_dlods(Direction.SOUTH, Direction.WEST);
             }
 
-            for (int z = 0; z <= size; ++z) {
-                int prev_x = -1;
-                int prev_num_vertices = -1;
-                for (int x = size; x >= 0; --x) {
-                    int vertices = grid[x, z].get_num_vertices(Direction.WEST);
-                    if (vertices > 0) {
-                        if (prev_num_vertices != -1) {
-                            float diff = prev_num_vertices / vertices;
-                            if (diff < 1.0f / threshold || diff > 1.0f * threshold) {
-                                int new_x = x + ((prev_x - x) / 2);
-                                grid[new_x, z].add_frustums();
-                                west = false;
-                            }
-                        }
+            return;
+        }
 
-                        prev_x = x;
-                        prev_num_vertices = vertices;
-                    }
-                }
+        angle = Vector3.SignedAngle(camera.transform.forward, Vector3.left, camera.transform.up);
+        if (Mathf.Abs(angle) <= 45.0f) {
+
+            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
+            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
+
+            if (angle > 0.0f) {
+                grid[x_pos, z_pos].apply_dlods(Direction.WEST, Direction.NORTH);
+            } else {
+                grid[x_pos, z_pos].apply_dlods(Direction.WEST, Direction.SOUTH);
             }
 
-            ++counter;
+            return;
+        }
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.cyan;
+
+        if (GridNode.active_1) {
+            Gizmos.DrawLine(GridNode.active_1.transform.position, GridNode.active_1.transform.position + GridNode.active_1.transform.forward);
+        }
+
+        if (GridNode.active_2) {
+            Gizmos.DrawLine(GridNode.active_2.transform.position, GridNode.active_2.transform.position + GridNode.active_2.transform.forward);
         }
     }
 }

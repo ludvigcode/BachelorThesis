@@ -21,4 +21,10 @@ public class DLODTable : MonoBehaviour {
         dlod_version.version = version;
         dlods.Add(dlod_version);
     }
+
+    public void apply() {
+        foreach (DLODVersion dlod in dlods) {
+            dlod.dlod.activate(dlod.version);
+        }
+    }
 }

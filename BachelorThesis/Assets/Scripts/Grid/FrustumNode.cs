@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FrustumNode : MonoBehaviour {
+
     public Camera frustum = null;
     public DLODTable table = null;
     public GridNode parent = null;
@@ -21,6 +22,12 @@ public class FrustumNode : MonoBehaviour {
         frustum.fieldOfView = 54.56f;
         frustum.nearClipPlane = 1.0f;
         frustum.farClipPlane = 100.0f;
+    }
+
+    public void apply_dlod_table() {
+        if (table) {
+            table.apply();
+        }
     }
 
     public int calc_triangles() {
@@ -97,6 +104,8 @@ public class FrustumNode : MonoBehaviour {
 
                 dlod.first.try_to_higher();
 
+
+                DestroyImmediate(tex);
                 ++counter;
             }
 
@@ -115,6 +124,7 @@ public class FrustumNode : MonoBehaviour {
                 }
             }
 
+            DestroyImmediate(reference);
             ++itr;
         }
 
