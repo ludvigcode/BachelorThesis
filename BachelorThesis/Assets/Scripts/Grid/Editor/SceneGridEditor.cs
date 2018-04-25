@@ -17,8 +17,21 @@ public class SceneGridEditor : Editor {
 
         EditorGUILayout.Space();
 
-        EditorGUILayout.LabelField("Rendering", EditorStyles.boldLabel);
         sg.triangle_limit = EditorGUILayout.IntField("Triangle Limit", sg.triangle_limit);
+
+        EditorGUILayout.Space();
+
+        sg.size = EditorGUILayout.IntField("Size", sg.size);
+        sg.spread = EditorGUILayout.IntField("Spread", sg.size);
+
+        EditorGUILayout.Space();
+
+        sg.y_height = EditorGUILayout.FloatField("Y Height", sg.y_height);
+
+        EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField("Images", EditorStyles.boldLabel);
+
         sg.width = EditorGUILayout.IntField("Texture Width", sg.width);
         sg.height = EditorGUILayout.IntField("Texture Height", sg.height);
 
@@ -36,6 +49,10 @@ public class SceneGridEditor : Editor {
         }
 
         Handles.color = Color.magenta;
+
+        if (sg.grid == null) {
+            sg.find_nodes();
+        }
 
         for (int x = 0; x <= sg.size; ++x) {
             for (int z = 0; z <= sg.size; ++z) {

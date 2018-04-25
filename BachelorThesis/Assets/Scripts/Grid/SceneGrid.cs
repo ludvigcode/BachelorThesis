@@ -10,9 +10,11 @@ public class SceneGrid : MonoBehaviour {
     public int width = 800;
     public int height = 600;
     public int size = 10;
-    public float spread = 10.0f;
+    public int spread = 10;
     public float y_height = 2.0f;
     public GameObject grid_obj = null;
+
+    [SerializeField]
     public GridNode[,] grid;
 
     public bool is_initialized = false;
@@ -29,12 +31,12 @@ public class SceneGrid : MonoBehaviour {
         for (int x = 0; x <= size; ++x) {
             for (int z = 0; z <= size; ++z) {
                 GameObject obj = new GameObject("node_" + x + "_" + z);
-                obj.transform.position = new Vector3(x * spread, transform.position.y, z * spread);
+                obj.transform.position = new Vector3(x * spread, y_height, z * spread);
                 obj.transform.parent = grid_obj.transform;
 
                 GridNode node = obj.AddComponent<GridNode>();
+                node.add_frustums();
                 grid[x, z] = node;
-                grid[x, z].add_frustums();
             }
         }
 
@@ -55,8 +57,8 @@ public class SceneGrid : MonoBehaviour {
         float angle = Vector3.SignedAngle(camera.transform.forward, Vector3.forward, camera.transform.up);
         if (Mathf.Abs(angle) <= 45.0f) {
 
-            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
-            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
+            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size);
+            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size);
 
             if (angle > 0.0f) {
                 grid[x_pos, z_pos].apply_dlods(Direction.NORTH, Direction.EAST);
@@ -113,15 +115,38 @@ public class SceneGrid : MonoBehaviour {
         }
     }
 
+    public void find_nodes() {
+        grid = new GridNode[size + 1, size + 1];
+
+        for (int x = 0; x <= size; ++x) {
+            for (int z = 0; z <= size; ++z) {
+                for (int i = 0; i < 4; ++i) {
+                    GameObject obj = GameObject.Find("node_" + x + "_" + z);
+                    GridNode node = obj.GetComponent<GridNode>();
+                    if (node) {
+                        node.find_frustums();
+                        grid[x, z] = node;
+                    }
+                }
+            }
+        }
+    }
+
+    private void Start() {
+        if (grid == null) {
+            find_nodes();
+        }
+    }
+
     private void OnDrawGizmos() {
         Gizmos.color = Color.cyan;
 
         if (GridNode.active_1) {
-            Gizmos.DrawLine(GridNode.active_1.transform.position, GridNode.active_1.transform.position + GridNode.active_1.transform.forward);
+            Gizmos.DrawLine(GridNode.active_1.transform.position, GridNode.active_1.transform.position + GridNode.active_1.transform.forward * 10.0f);
         }
 
         if (GridNode.active_2) {
-            Gizmos.DrawLine(GridNode.active_2.transform.position, GridNode.active_2.transform.position + GridNode.active_2.transform.forward);
+            Gizmos.DrawLine(GridNode.active_2.transform.position, GridNode.active_2.transform.position + GridNode.active_2.transform.forward * 10.0f);
         }
     }
 }
