@@ -53,16 +53,20 @@ public class SceneGrid : MonoBehaviour {
 
     public void set_dlods(Camera camera) {
 
+        int x_pos = (int)(camera.transform.position.x / spread);
+        int z_pos = (int)(camera.transform.position.z / spread);
+
         // Check direction.
         float angle = Vector3.SignedAngle(camera.transform.forward, Vector3.forward, camera.transform.up);
         if (Mathf.Abs(angle) <= 45.0f) {
 
-            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size);
-            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size);
-
-            if (angle > 0.0f) {
+            if (angle < 0.0f) {
+                x_pos = Mathf.Clamp(x_pos, 0, size);
+                z_pos = Mathf.Clamp(z_pos, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.NORTH, Direction.EAST);
             } else {
+                x_pos = Mathf.Clamp(x_pos + 1, 0, size);
+                z_pos = Mathf.Clamp(z_pos, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.NORTH, Direction.WEST);
             }
 
@@ -72,12 +76,13 @@ public class SceneGrid : MonoBehaviour {
         angle = Vector3.SignedAngle(camera.transform.forward, Vector3.right, camera.transform.up);
         if (Mathf.Abs(angle) <= 45.0f) {
 
-            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
-            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
-
-            if (angle > 0.0f) {
+            if (angle < 0.0f) {
+                x_pos = Mathf.Clamp(x_pos, 0, size);
+                z_pos = Mathf.Clamp(z_pos + 1, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.EAST, Direction.SOUTH);
             } else {
+                x_pos = Mathf.Clamp(x_pos, 0, size);
+                z_pos = Mathf.Clamp(z_pos , 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.EAST, Direction.NORTH);
             }
 
@@ -87,12 +92,13 @@ public class SceneGrid : MonoBehaviour {
         angle = Vector3.SignedAngle(camera.transform.forward, Vector3.back, camera.transform.up);
         if (Mathf.Abs(angle) <= 45.0f) {
 
-            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
-            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
-
             if (angle > 0.0f) {
+                x_pos = Mathf.Clamp(x_pos, 0, size);
+                z_pos = Mathf.Clamp(z_pos + 1, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.SOUTH, Direction.EAST);
             } else {
+                x_pos = Mathf.Clamp(x_pos + 1, 0, size);
+                z_pos = Mathf.Clamp(z_pos + 1, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.SOUTH, Direction.WEST);
             }
 
@@ -102,12 +108,13 @@ public class SceneGrid : MonoBehaviour {
         angle = Vector3.SignedAngle(camera.transform.forward, Vector3.left, camera.transform.up);
         if (Mathf.Abs(angle) <= 45.0f) {
 
-            int x_pos = Mathf.Clamp((int)(camera.transform.position.x / spread), 0, size + 1);
-            int z_pos = Mathf.Clamp((int)(camera.transform.position.z / spread), 0, size + 1);
-
-            if (angle > 0.0f) {
+            if (angle < 0.0f) {
+                x_pos = Mathf.Clamp(x_pos + 1, 0, size);
+                z_pos = Mathf.Clamp(z_pos, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.WEST, Direction.NORTH);
             } else {
+                x_pos = Mathf.Clamp(x_pos + 1, 0, size);
+                z_pos = Mathf.Clamp(z_pos + 1, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.WEST, Direction.SOUTH);
             }
 

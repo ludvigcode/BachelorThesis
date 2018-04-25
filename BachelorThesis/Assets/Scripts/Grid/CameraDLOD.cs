@@ -15,4 +15,10 @@ public class CameraDLOD : MonoBehaviour {
     private void Update() {
         grid.set_dlods(_cam);
     }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.green;
+
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10.0f);
+    }
 }
