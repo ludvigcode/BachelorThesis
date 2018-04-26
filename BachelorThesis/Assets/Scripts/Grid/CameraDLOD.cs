@@ -5,7 +5,6 @@ using UnityEngine;
 public class CameraDLOD : MonoBehaviour {
 
     public SceneGrid grid;
-
     private Camera _cam;
 
     private void Start() {
@@ -18,7 +17,6 @@ public class CameraDLOD : MonoBehaviour {
 
     private void OnDrawGizmos() {
         Gizmos.color = Color.green;
-
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 10.0f);
     }
 }

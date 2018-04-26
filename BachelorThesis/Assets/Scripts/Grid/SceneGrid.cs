@@ -56,6 +56,12 @@ public class SceneGrid : MonoBehaviour {
         int x_pos = (int)(camera.transform.position.x / spread);
         int z_pos = (int)(camera.transform.position.z / spread);
 
+        DLODGroup[] dlods = GameObject.FindObjectsOfType<DLODGroup>();
+
+        foreach (DLODGroup dlod in dlods) {
+            dlod.cull();
+        }
+
         // Check direction.
         float angle = Vector3.SignedAngle(camera.transform.forward, Vector3.forward, camera.transform.up);
         if (Mathf.Abs(angle) <= 45.0f) {
@@ -132,9 +138,19 @@ public class SceneGrid : MonoBehaviour {
                     GridNode node = obj.GetComponent<GridNode>();
                     if (node) {
                         node.find_frustums();
-                        grid[x, z] = node;
+                        grid[x, z] = node; 
                     }
                 }
+            }
+        }
+    }
+
+    public void remove_cameras() {
+        Camera[] cameras = FindObjectsOfType<Camera>();
+
+        foreach(Camera cam in cameras) {
+            if (cam != Camera.main) {
+                DestroyImmediate(cam);
             }
         }
     }

@@ -40,6 +40,10 @@ public class SceneGridEditor : Editor {
         if (GUILayout.Button("Init")) {
             sg.init();
         }
+
+        if (GUILayout.Button("Remove Cameras")) {
+            sg.remove_cameras();
+        }
     }
 
     private void OnSceneGUI() {

@@ -19,9 +19,9 @@ public class FrustumNode : MonoBehaviour {
         transform.localPosition = Vector3.zero;
         transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         frustum = gameObject.AddComponent<Camera>();
-        frustum.fieldOfView = 54.56f;
-        frustum.nearClipPlane = 1.0f;
-        frustum.farClipPlane = 100.0f;
+        frustum.fieldOfView = 70.0f;
+        frustum.nearClipPlane = 0.1f;
+        frustum.farClipPlane = 1000.0f;
     }
 
     public void apply_dlod_table() {
@@ -181,8 +181,8 @@ public class FrustumNode : MonoBehaviour {
         List<DLODGroup> return_dlods = new List<DLODGroup>();
 
         foreach (DLODGroup dlod in dlods) {
-            BoxCollider collider = dlod.GetComponent<BoxCollider>();
-            if (GeometryUtility.TestPlanesAABB(planes, collider.bounds)) {
+            // BoxCollider collider = dlod.GetComponent<BoxCollider>();
+            if (GeometryUtility.TestPlanesAABB(planes, dlod.get_bounds())) {
                 return_dlods.Add(dlod);
             }
         }

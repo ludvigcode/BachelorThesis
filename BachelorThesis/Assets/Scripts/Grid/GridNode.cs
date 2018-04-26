@@ -139,6 +139,7 @@ public class GridNode : MonoBehaviour {
     private void add_frustum(Direction dir) {
         GameObject obj = new GameObject();
         _frustums[(int)dir] = obj.AddComponent<FrustumNode>();
+
         switch (dir) {
             case Direction.NORTH:
                 obj.name = gameObject.name + "_north";
