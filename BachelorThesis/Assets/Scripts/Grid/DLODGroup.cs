@@ -41,14 +41,8 @@ public class DLODGroup : MonoBehaviour {
 
         int version = active_version + 1;
 
-        if (version > dlods.Count) {
+        if (version >= dlods.Count) {
             return false;
-        }
-
-        if (version == dlods.Count) {
-            dlods[active_version].SetActive(false);
-            active_version = -1;
-            return true;
         }
 
         dlods[active_version].SetActive(false);

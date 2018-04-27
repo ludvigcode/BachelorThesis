@@ -24,12 +24,7 @@ public class DLODTable : MonoBehaviour {
 
     public void apply() {
         foreach (DLODVersion dlod in dlods) {
-            if (dlod.version == -1 && dlod.dlod.is_culled()) {
-                dlod.dlod.activate(dlod.dlod.num_dlod_versions() - 1);
-                continue;
-            }
-
-            if ((dlod.dlod.get_active_version() > dlod.version) || dlod.dlod.is_culled()) {
+            if (dlod.dlod.get_active_version() > dlod.version || dlod.dlod.is_culled()) {
                 dlod.dlod.activate(dlod.version);
             }
         }
