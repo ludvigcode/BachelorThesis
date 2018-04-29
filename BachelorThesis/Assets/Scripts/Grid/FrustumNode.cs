@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FrustumNode : MonoBehaviour {
+
     public Camera frustum = null;
     public DLODTable table = null;
     public GridNode parent = null;
@@ -18,9 +19,15 @@ public class FrustumNode : MonoBehaviour {
         transform.localPosition = Vector3.zero;
         transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         frustum = gameObject.AddComponent<Camera>();
-        frustum.fieldOfView = 54.56f;
-        frustum.nearClipPlane = 1.0f;
-        frustum.farClipPlane = 100.0f;
+        frustum.fieldOfView = 90.0f;
+        frustum.nearClipPlane = 0.1f;
+        frustum.farClipPlane = 1000.0f;
+    }
+
+    public void apply_dlod_table() {
+        if (table) {
+            table.apply();
+        }
     }
 
     public int calc_triangles() {
@@ -29,7 +36,7 @@ public class FrustumNode : MonoBehaviour {
         foreach (DLODGroup dlod in dlods) {
             if (!dlod.is_culled()) {
                 num_vertices += dlod.get_active_dlod_mesh_filter().sharedMesh.triangles.Length / 3;
-                
+
             }
         }
 
@@ -53,12 +60,13 @@ public class FrustumNode : MonoBehaviour {
         }
 
         int itr = 0;
+        Texture2D reference = _take_screen_shoot(width, height);
+
         while (triangles > max_triangles) {
-            Texture2D reference = _take_screen_shoot(width, height);
 
             Pair<DLODGroup, float>[] dlod_ssim = new Pair<DLODGroup, float>[dlods.Length];
             for (int i = 0; i < dlods.Length; ++i) {
-                dlod_ssim[i] = new Pair<DLODGroup, float>(dlods[i], 1.0f);
+                dlod_ssim[i] = new Pair<DLODGroup, float>(dlods[i], -1.0f);
 
             }
 
@@ -72,7 +80,7 @@ public class FrustumNode : MonoBehaviour {
             foreach (Pair<DLODGroup, float> dlod in dlod_ssim) {
                 // If false we, skip. The mesh will be culled.
                 if (!dlod.first.try_to_lower()) {
-                    dlod.second = -1.0f;
+                    dlod.second = dlod.first.num_dlod_versions() - 1;
                     continue;
                 }
 
@@ -91,12 +99,13 @@ public class FrustumNode : MonoBehaviour {
                         dlod_table += "\n";
                     }
 
-                    File.WriteAllText(folder_path + "/" +  gameObject.name + "_itr_" + itr.ToString() + "_" + counter.ToString() + ".txt", dlod_table);
+                    File.WriteAllText(folder_path + "/" + gameObject.name + "_itr_" + itr.ToString() + "_" + counter.ToString() + ".txt", dlod_table);
                     File.WriteAllBytes(folder_path + "/" + gameObject.name + "_itr_" + itr.ToString() + "_" + counter.ToString() + ".png", tex.EncodeToPNG());
                 }
 
                 dlod.first.try_to_higher();
 
+                DestroyImmediate(tex);
                 ++counter;
             }
 
@@ -112,11 +121,17 @@ public class FrustumNode : MonoBehaviour {
             if (index >= 0) {
                 if (dlod_ssim[index].first.try_to_lower()) {
                     triangles = calc_triangles();
+                } else {
+                    triangles = 0;
                 }
+            } else {
+                triangles = 0;
             }
 
             ++itr;
         }
+
+        DestroyImmediate(reference);
 
         table = GetComponent<DLODTable>();
         if (!table) {
@@ -171,8 +186,7 @@ public class FrustumNode : MonoBehaviour {
         List<DLODGroup> return_dlods = new List<DLODGroup>();
 
         foreach (DLODGroup dlod in dlods) {
-            BoxCollider collider = dlod.GetComponent<BoxCollider>();
-            if (GeometryUtility.TestPlanesAABB(planes, collider.bounds)) {
+            if (GeometryUtility.TestPlanesAABB(planes, dlod.get_bounds())) {
                 return_dlods.Add(dlod);
             }
         }
