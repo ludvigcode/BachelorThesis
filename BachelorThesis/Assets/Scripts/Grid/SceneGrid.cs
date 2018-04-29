@@ -7,11 +7,16 @@ public class SceneGrid : MonoBehaviour {
     public bool save_images = false;
     public string folderpath = null;
     public int max_dlod_versions = 4;
+    public float reduce_percentage = 0.75f;
+    public int width = 800;
+    public int height = 600;
     public int triangle_limit = 1000;
     public int size = 10;
     public int spread = 10;
     public float y_height = 2.0f;
     public GameObject grid_obj = null;
+
+    public Simplification simp = null;
 
     [SerializeField]
     public GridNode[,] grid;
@@ -23,6 +28,7 @@ public class SceneGrid : MonoBehaviour {
             DestroyImmediate(grid_obj);
         }
 
+        simp = new Simplification();
         _create_dlods();
 
         grid_obj = new GameObject();
@@ -178,5 +184,8 @@ public class SceneGrid : MonoBehaviour {
 
     private void _create_dlods() {
 
+        simp.lod_levels = max_dlod_versions;
+        simp.quality = reduce_percentage;
+        simp.create_lod();
     }
 }
