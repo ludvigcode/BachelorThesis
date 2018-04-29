@@ -6,6 +6,7 @@ public class SceneGrid : MonoBehaviour {
 
     public bool save_images = false;
     public string folderpath = null;
+    public int max_dlod_versions = 4;
     public int triangle_limit = 1000;
     public int width = 800;
     public int height = 600;
@@ -23,6 +24,8 @@ public class SceneGrid : MonoBehaviour {
         if (is_initialized) {
             DestroyImmediate(grid_obj);
         }
+
+        _create_dlods();
 
         grid_obj = new GameObject();
         grid_obj.transform.parent = transform;
@@ -171,5 +174,9 @@ public class SceneGrid : MonoBehaviour {
         if (GridNode.active_2) {
             Gizmos.DrawLine(GridNode.active_2.transform.position, GridNode.active_2.transform.position + GridNode.active_2.transform.forward * 10.0f);
         }
+    }
+
+    private void _create_dlods() {
+
     }
 }
