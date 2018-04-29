@@ -6,6 +6,10 @@ public class DLODGroup : MonoBehaviour {
     public List<GameObject> dlods;
     private int active_version = -1;
 
+    public Bounds get_bounds() {
+        return dlods[0].GetComponent<MeshRenderer>().bounds;
+    }
+
     public int get_active_version() {
         return active_version;
     }
@@ -37,14 +41,8 @@ public class DLODGroup : MonoBehaviour {
 
         int version = active_version + 1;
 
-        if (version > dlods.Count) {
+        if (version >= dlods.Count) {
             return false;
-        }
-
-        if (version == dlods.Count) {
-            dlods[active_version].SetActive(false);
-            active_version = -1;
-            return true;
         }
 
         dlods[active_version].SetActive(false);
@@ -88,6 +86,14 @@ public class DLODGroup : MonoBehaviour {
         active_version = 0;
     }
 
+    public void cull() {
+        if (active_version != -1) {
+            dlods[active_version].SetActive(false);
+        }
+
+        active_version = -1;
+    }
+
     public void activate(int version) {
         if (dlods.Count == 0) {
             return;
@@ -97,7 +103,18 @@ public class DLODGroup : MonoBehaviour {
             dlods[active_version].SetActive(false);
         }
 
-        dlods[version].SetActive(true);
+        if (version != -1) {
+            dlods[version].SetActive(true);
+        }
+
         active_version = version;
+    }
+
+    private void Start() {
+        foreach (GameObject go in dlods) {
+            go.SetActive(false);
+        }
+
+        active_version = -1;
     }
 }

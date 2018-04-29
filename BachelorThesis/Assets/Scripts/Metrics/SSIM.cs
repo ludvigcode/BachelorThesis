@@ -23,14 +23,16 @@ public static class SSIM {
     }
 
     public static float compute_mssim_textures(Texture2D reference, Texture2D image, int width, int height) {
-        return compute_mssim_byte(reference.GetRawTextureData(), image.GetRawTextureData(), width, height);
+        byte[] ref_bytes = reference.EncodeToPNG();
+        byte[] img_bytes = image.EncodeToPNG();
+        return compute_mssim_byte(ref_bytes, img_bytes, width, height);
     }
 
     // To be used when comparing screenshots in run-time.
     public static float compute_mssim_byte(byte[] reference, byte[] image, int width, int height) {
         // Allocate unmanaged memory.
-        IntPtr ua1 = Marshal.AllocHGlobal(Marshal.SizeOf(reference[0]) * reference.Length);
-        IntPtr ua2 = Marshal.AllocHGlobal(Marshal.SizeOf(image[0]) * image.Length);
+        IntPtr ua1 = Marshal.AllocHGlobal(reference.Length);
+        IntPtr ua2 = Marshal.AllocHGlobal(image.Length);
 
         // Copy content from byte arrays into the unmanaged memory.
         Marshal.Copy(reference, 0, ua1, reference.Length);
