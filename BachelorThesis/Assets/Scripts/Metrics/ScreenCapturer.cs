@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -80,8 +81,20 @@ public class ScreenCapturer : MonoBehaviour {
         byte[] image1 = capture_screenshot();
         obj.SetActive(false);
         byte[] image2 = capture_screenshot();
-        float index = SSIM.compute_mssim_byte(image1, image2, capture_width, capture_height);
-        Debug.Log("MSSIM: " + index);
+        float start_time = 0;
+
+        float[] numbers = new float[10];
+
+        for(int i = 0; i < 10; i++)
+        {
+            start_time = Time.realtimeSinceStartup;
+            float index = SSIM.compute_mssim_byte(image1, image2, capture_width, capture_height);
+            numbers[i] = Time.realtimeSinceStartup - start_time;
+            //Debug.Log("MSSIM Execution Time: " + (Time.realtimeSinceStartup - start_time));
+            //Debug.Log("MSSIM: " + index);
+        }
+
+        Debug.Log("MSSIM Average Execution Time: " + (numbers.Average()));
     }
 
     void Update () {
