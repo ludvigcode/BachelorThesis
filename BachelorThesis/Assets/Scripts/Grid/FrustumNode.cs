@@ -66,7 +66,7 @@ public class FrustumNode : MonoBehaviour {
 
             Pair<DLODGroup, float>[] dlod_ssim = new Pair<DLODGroup, float>[dlods.Length];
             for (int i = 0; i < dlods.Length; ++i) {
-                dlod_ssim[i] = new Pair<DLODGroup, float>(dlods[i], 1.0f);
+                dlod_ssim[i] = new Pair<DLODGroup, float>(dlods[i], -1.0f);
 
             }
 
