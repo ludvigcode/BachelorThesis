@@ -50,7 +50,7 @@ public class ScreenCapturer : MonoBehaviour {
         RenderTexture.active = null;
 
         byte[] fileData = null;
-        fileData = _screenshot.EncodeToJPG();
+        fileData = _screenshot.GetRawTextureData();
 
         // cleanup if needed.
         if (optimize == false)

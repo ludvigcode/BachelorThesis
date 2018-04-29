@@ -8,8 +8,6 @@ public class SceneGrid : MonoBehaviour {
     public string folderpath = null;
     public int max_dlod_versions = 4;
     public int triangle_limit = 1000;
-    public int width = 800;
-    public int height = 600;
     public int size = 10;
     public int spread = 10;
     public float y_height = 2.0f;
@@ -43,7 +41,7 @@ public class SceneGrid : MonoBehaviour {
             }
         }
 
-        for (int x = 0; x <= size; ++x) {
+      for (int x = 0; x <= size; ++x) {
             for (int z = 0; z <= size; ++z) {
                 for (int i = 0; i < 4; ++i) {
                     grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
@@ -174,6 +172,8 @@ public class SceneGrid : MonoBehaviour {
         if (GridNode.active_2) {
             Gizmos.DrawLine(GridNode.active_2.transform.position, GridNode.active_2.transform.position + GridNode.active_2.transform.forward * 10.0f);
         }
+
+        is_initialized = true;
     }
 
     private void _create_dlods() {
