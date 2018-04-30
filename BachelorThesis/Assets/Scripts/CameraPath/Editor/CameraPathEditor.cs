@@ -19,6 +19,9 @@ public class CameraPathEditor : Editor
     {
         CameraPath cp = (CameraPath)target;
 
+        EditorGUILayout.LabelField("Generate Settings", EditorStyles.boldLabel);
+        EditorGUILayout.Space();
+
         cp.frequency = EditorGUILayout.IntField("Points", cp.frequency);
         cp.lookForward = EditorGUILayout.Toggle("Look Forward", cp.lookForward);
         cp.spline = (BezierSpline)EditorGUILayout.ObjectField("Spline", cp.spline, typeof(BezierSpline), true);
@@ -33,6 +36,23 @@ public class CameraPathEditor : Editor
         if (GUILayout.Button("Clear"))
         {
             cp.clear();
+        }
+
+        EditorGUILayout.LabelField("Runtime Settings", EditorStyles.boldLabel);
+        EditorGUILayout.Space();
+
+        cp.steptime = EditorGUILayout.FloatField("Step Time", cp.steptime);
+        cp.loop = EditorGUILayout.Toggle("Loop Path", cp.loop);
+
+        EditorGUILayout.LabelField("Image Settings", EditorStyles.boldLabel);
+        EditorGUILayout.Space();
+
+        cp.save_images = EditorGUILayout.Toggle("Save Images", cp.save_images);
+
+        if (cp.save_images) {
+            cp.folder_path = EditorGUILayout.TextField("Folderpath", cp.folder_path);
+            cp.ímg_width = EditorGUILayout.IntField("Image Width", cp.ímg_width);
+            cp.img_height = EditorGUILayout.IntField("Image Height", cp.img_height);
         }
     }
     #endregion

@@ -173,6 +173,7 @@ public class Simplification {
 
                 // Was LOD Group valid?
                 if (group) {
+
                     // Get the shared mesh hash code.
                     string mesh_hash_code = _scene_objects[i].mesh_filter.sharedMesh.GetHashCode().ToString();
 

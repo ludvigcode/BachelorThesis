@@ -141,8 +141,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spline: {fileID: 1183234733}
-  frequency: 7
+  frequency: 30
   lookForward: 1
+  loop: 0
+  steptime: 1
+  save_images: 0
+  "\xEDmg_width": 800
+  img_height: 600
+  folder_path: C:/Users/Fredrik/Desktop/TestPhoto
   point_array:
   - {fileID: 156736482}
 --- !u!4 &156736482
@@ -332,13 +338,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   points:
-  - {x: 0.7842121, y: 0, z: -0.5412479}
-  - {x: 0.4236889, y: 0, z: -5.0483727}
-  - {x: 7.2352657, y: 0, z: -5.4095683}
-  - {x: 7.514448, y: 0, z: -1.0653381}
-  - {x: 8.038251, y: 0, z: 3.7028055}
-  - {x: 0.8601785, y: 0, z: 3.9741914}
-  - {x: 0.7842121, y: 0, z: -0.5412479}
+  - {x: -10.251407, y: 0, z: -0.5412479}
+  - {x: -10.61193, y: 0, z: -34.349026}
+  - {x: 10.03822, y: 0, z: -25.505075}
+  - {x: 10.317403, y: 0, z: -1.0653381}
+  - {x: 10.841206, y: 0, z: 21.898922}
+  - {x: -10.175441, y: 0, z: 22.86421}
+  - {x: -10.251407, y: 0, z: -0.5412479}
   force_Y: 0
   _forced_Y: 0
   _loop: 1

@@ -10,7 +10,7 @@ public class ScreenCapturer : MonoBehaviour {
     #region Public Variables
     public int capture_width;
     public int capture_height;
-    public GameObject obj;
+
     // Optimize for many screenshots. No objects will be destroyed so future screenshots are fast.
     public bool optimize;
     #endregion
@@ -25,8 +25,7 @@ public class ScreenCapturer : MonoBehaviour {
 
     #region Public Functions
 
-
-    public byte[] capture_screenshot()
+    public byte[] capture_byte_screenshot()
     {
         // Create screenshot objects if necessary.
         if (_render_texture == null)
@@ -67,26 +66,24 @@ public class ScreenCapturer : MonoBehaviour {
 
     #region Private Functions
 
-    #endregion
-    private void Start()
-    {
-        String currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
-        String dllPath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "Assets" + Path.DirectorySeparatorChar + "Plugins";
-        if (currentPath.Contains(dllPath) == false)
-        {
-            Environment.SetEnvironmentVariable("PATH", currentPath + Path.PathSeparator + dllPath, EnvironmentVariableTarget.Process);
-        }
+    private void average_ssim_test() {
+
+        // Force environment path to plugin folder.
+
+        //String currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+        //String dllPath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "Assets" + Path.DirectorySeparatorChar + "Plugins";
+        //if (currentPath.Contains(dllPath) == false) {
+        //    Environment.SetEnvironmentVariable("PATH", currentPath + Path.PathSeparator + dllPath, EnvironmentVariableTarget.Process);
+        //}
 
         _main_camera = Camera.main;
-        byte[] image1 = capture_screenshot();
-        obj.SetActive(false);
-        byte[] image2 = capture_screenshot();
+        byte[] image1 = capture_byte_screenshot();
+        byte[] image2 = capture_byte_screenshot();
         float start_time = 0;
 
         float[] numbers = new float[10];
 
-        for(int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             start_time = Time.realtimeSinceStartup;
             float index = SSIM.compute_mssim_byte(image1, image2, capture_width, capture_height);
             numbers[i] = Time.realtimeSinceStartup - start_time;
@@ -96,8 +93,6 @@ public class ScreenCapturer : MonoBehaviour {
 
         Debug.Log("MSSIM Average Execution Time: " + (numbers.Average()));
     }
-
-    void Update () {
-
-    }
+    #endregion
+    
 }
