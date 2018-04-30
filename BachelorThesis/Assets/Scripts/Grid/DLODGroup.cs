@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DLODGroup : MonoBehaviour {
-    public List<GameObject> dlods;
+    public List<GameObject> dlods = null;
     private int active_version = -1;
 
     public Bounds get_bounds() {

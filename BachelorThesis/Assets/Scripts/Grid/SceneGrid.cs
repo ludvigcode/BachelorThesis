@@ -6,8 +6,7 @@ public class SceneGrid : MonoBehaviour {
 
     public bool save_images = false;
     public string folderpath = null;
-    public int max_dlod_versions = 4;
-    public float reduce_percentage = 0.75f;
+    public int max_dlod_versions = 5;
     public int width = 800;
     public int height = 600;
     public int triangle_limit = 1000;
@@ -47,7 +46,7 @@ public class SceneGrid : MonoBehaviour {
             }
         }
 
-      for (int x = 0; x <= size; ++x) {
+        for (int x = 0; x <= size; ++x) {
             for (int z = 0; z <= size; ++z) {
                 for (int i = 0; i < 4; ++i) {
                     grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
@@ -95,7 +94,7 @@ public class SceneGrid : MonoBehaviour {
                 grid[x_pos, z_pos].apply_dlods(Direction.EAST, Direction.SOUTH);
             } else {
                 x_pos = Mathf.Clamp(x_pos, 0, size);
-                z_pos = Mathf.Clamp(z_pos , 0, size);
+                z_pos = Mathf.Clamp(z_pos, 0, size);
                 grid[x_pos, z_pos].apply_dlods(Direction.EAST, Direction.NORTH);
             }
 
@@ -145,7 +144,7 @@ public class SceneGrid : MonoBehaviour {
                     GridNode node = obj.GetComponent<GridNode>();
                     if (node) {
                         node.find_frustums();
-                        grid[x, z] = node; 
+                        grid[x, z] = node;
                     }
                 }
             }
@@ -155,7 +154,7 @@ public class SceneGrid : MonoBehaviour {
     public void remove_cameras() {
         Camera[] cameras = FindObjectsOfType<Camera>();
 
-        foreach(Camera cam in cameras) {
+        foreach (Camera cam in cameras) {
             if (cam != Camera.main) {
                 DestroyImmediate(cam);
             }
@@ -185,7 +184,6 @@ public class SceneGrid : MonoBehaviour {
     private void _create_dlods() {
 
         simp.lod_levels = max_dlod_versions;
-        simp.quality = reduce_percentage;
         simp.create_lod();
     }
 }

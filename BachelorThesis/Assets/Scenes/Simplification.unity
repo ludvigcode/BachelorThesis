@@ -142,6 +142,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dlods:
   - {fileID: 1552096286}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &18811996
 Transform:
   m_ObjectHideFlags: 0
