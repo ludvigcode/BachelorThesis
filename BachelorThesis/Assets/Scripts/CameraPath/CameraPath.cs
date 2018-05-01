@@ -5,11 +5,10 @@ using UnityEngine;
 
 public class CameraPath : MonoBehaviour {
 
-    #region Public Variables
+    public SceneGrid grid;
     public BezierSpline spline;
     public int frequency;
     public bool lookForward;
-    public bool loop;
     public float handle_size = 1.0f;
     public float steptime;
     public bool save_images;
@@ -17,20 +16,25 @@ public class CameraPath : MonoBehaviour {
     public int img_height = 600;
     public string folder_path = null;
     public List<GameObject> point_array = null;
-    #endregion
 
-    #region Private Variables
+    private enum State {
+        BEGIN,
+        REF,
+        OURS,
+        UNITY,
+        DONE
+    }
+
+    private State _active_state = State.REF;
+
     private Camera _m_cam;
     private float _progress = 0.0f;
     private int _index = 0;
     private bool _generated;
     private bool _finished;
-    #endregion
-
-    #region Public Functions
 
     public void clear() {
-        
+
         foreach (GameObject go in point_array) {
             DestroyImmediate(go);
         }
@@ -73,19 +77,71 @@ public class CameraPath : MonoBehaviour {
             Debug.Log("Clear existing points before generate new points!");
         }
     }
-    #endregion
 
-    #region Private Functions
     private void Start() {
         _m_cam = Camera.main;
-        _finished = false;
+        _finished = true;
     }
 
     private void Update() {
-
-        if (_finished != true) {
-            _traverse_path();
+        if (_active_state == State.DONE) {
+            return;
         }
+
+        if (_finished) {
+            ++_active_state;
+            _finished = false;
+
+            if (_active_state == State.REF) {
+                DLODGroup[] dlods = FindObjectsOfType<DLODGroup>();
+                foreach (DLODGroup d in dlods) {
+                    d.set_to_original();
+                }
+            } else if (_active_state == State.UNITY) {
+
+                DLODGroup[] dlods = FindObjectsOfType<DLODGroup>();
+                foreach (DLODGroup d in dlods) {
+                    d.set_to_original();
+                    GameObject go = d.gameObject;
+                    LODGroup lod_grp = go.AddComponent<LODGroup>();
+                    LOD[] lods = new LOD[5];
+
+                    MeshRenderer[] m1 = new MeshRenderer[1];
+                    m1[0] = d.dlods[0].GetComponent<MeshRenderer>();
+                    lods[0].renderers = m1;
+                    lods[0].screenRelativeTransitionHeight = 0.5f;
+
+                    MeshRenderer[] m2 = new MeshRenderer[1];
+                    m2[0] = d.dlods[1].GetComponent<MeshRenderer>();
+                    lods[1].renderers = m1;
+                    lods[1].screenRelativeTransitionHeight = 0.25f;
+
+                    MeshRenderer[] m3 = new MeshRenderer[1];
+                    m1[0] = d.dlods[2].GetComponent<MeshRenderer>();
+                    lods[2].renderers = m1;
+                    lods[2].screenRelativeTransitionHeight = 0.125f;
+
+                    MeshRenderer[] m4 = new MeshRenderer[1];
+                    m1[0] = d.dlods[3].GetComponent<MeshRenderer>();
+                    lods[3].renderers = m1;
+                    lods[3].screenRelativeTransitionHeight = 0.075f;
+
+                    MeshRenderer[] m5 = new MeshRenderer[1];
+                    m1[0] = d.dlods[4].GetComponent<MeshRenderer>();
+                    lods[4].renderers = m1;
+                    lods[4].screenRelativeTransitionHeight = 0.01f;
+
+                    lod_grp.SetLODs(lods);
+                }
+
+            } else if (_active_state == State.DONE) {
+                return;
+            }
+        }
+
+
+
+        _traverse_path();
     }
 
     private void OnDrawGizmos() {
@@ -110,30 +166,25 @@ public class CameraPath : MonoBehaviour {
 
     private void _traverse_path() {
 
-        _progress += Time.deltaTime;
+        _m_cam.transform.position = point_array[_index].transform.position;
+        _m_cam.transform.rotation = point_array[_index].transform.rotation;
 
-        if (_progress > steptime) {
-            _progress = 0.0f;
+        if (_active_state == State.OURS) {
+            grid.set_dlods(_m_cam);
+        }
 
-            _m_cam.transform.position = point_array[_index].transform.position;
-            _m_cam.transform.rotation = point_array[_index].transform.rotation;
+        if (save_images) {
+            Texture2D tex = _take_screen_shoot(ímg_width, img_height);
+            File.WriteAllBytes(folder_path + "/" + _index.ToString() + ".png", tex.EncodeToPNG());
+            Destroy(tex);
+        }
 
-            if (save_images) {
-                Texture2D tex = _take_screen_shoot(ímg_width, img_height);
-                File.WriteAllBytes(folder_path + "/" + _index.ToString() + ".png", tex.EncodeToPNG());
-                Destroy(tex);
-            }
+        ++_index;
 
-            _index++;
-
-            if (_index >= point_array.Count) {
-                if (loop) {
-                    _index = 0;
-                } else {
-                    _finished = true;
-                    Debug.Log("Scene has been traversed!");
-                }
-            }
+        if (_index >= point_array.Count) {
+            _finished = true;
+            _index = 0;
+            Debug.Log("Scene has been traversed!");
         }
     }
 
@@ -154,5 +205,4 @@ public class CameraPath : MonoBehaviour {
         return screen_shot;
 
     }
-    #endregion
 }
