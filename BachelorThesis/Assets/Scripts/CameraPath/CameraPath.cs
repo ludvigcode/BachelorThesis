@@ -10,31 +10,31 @@ public class CameraPath : MonoBehaviour {
     public int frequency;
     public bool lookForward;
     public bool loop;
+    public float handle_size = 1.0f;
     public float steptime;
     public bool save_images;
     public int ímg_width = 800;
     public int img_height = 600;
     public string folder_path = null;
-    public Transform[] point_array;
+    public List<GameObject> point_array = null;
     #endregion
 
     #region Private Variables
     private Camera _m_cam;
     private float _progress = 0.0f;
-    private int _index = 1;
+    private int _index = 0;
     private bool _generated;
     private bool _finished;
     #endregion
 
     #region Public Functions
-    public void update() {
-        point_array = GetComponentsInChildren<Transform>();
-    }
 
     public void clear() {
-        while (transform.childCount != 0) {
-            DestroyImmediate(transform.GetChild(0).gameObject);
+        
+        foreach (GameObject go in point_array) {
+            DestroyImmediate(go);
         }
+        point_array.Clear();
         _generated = false;
     }
 
@@ -66,8 +66,8 @@ public class CameraPath : MonoBehaviour {
                     go.transform.LookAt(position + spline.get_direction(f * stepSize));
                 }
                 go.transform.parent = transform;
+                point_array.Add(go);
             }
-
             _generated = true;
         } else {
             Debug.Log("Clear existing points before generate new points!");
@@ -88,6 +88,26 @@ public class CameraPath : MonoBehaviour {
         }
     }
 
+    private void OnDrawGizmos() {
+        if (point_array.Count <= 2) {
+            return;
+        }
+
+        Gizmos.color = Color.red;
+
+        foreach (GameObject go in point_array) {
+            Gizmos.DrawSphere(go.transform.position, 1.0f);
+        }
+
+        Gizmos.color = Color.magenta;
+
+        for (int i = 0; i < point_array.Count - 1; ++i) {
+            Gizmos.DrawLine(point_array[i].transform.position, point_array[i + 1].transform.position);
+        }
+
+        Gizmos.DrawLine(point_array[point_array.Count - 1].transform.position, point_array[0].transform.position);
+    }
+
     private void _traverse_path() {
 
         _progress += Time.deltaTime;
@@ -95,8 +115,8 @@ public class CameraPath : MonoBehaviour {
         if (_progress > steptime) {
             _progress = 0.0f;
 
-            _m_cam.transform.position = point_array[_index].position;
-            _m_cam.transform.rotation = point_array[_index].rotation;
+            _m_cam.transform.position = point_array[_index].transform.position;
+            _m_cam.transform.rotation = point_array[_index].transform.rotation;
 
             if (save_images) {
                 Texture2D tex = _take_screen_shoot(ímg_width, img_height);
@@ -106,9 +126,9 @@ public class CameraPath : MonoBehaviour {
 
             _index++;
 
-            if (_index >= point_array.Length) {
+            if (_index >= point_array.Count) {
                 if (loop) {
-                    _index = 1;
+                    _index = 0;
                 } else {
                     _finished = true;
                     Debug.Log("Scene has been traversed!");
