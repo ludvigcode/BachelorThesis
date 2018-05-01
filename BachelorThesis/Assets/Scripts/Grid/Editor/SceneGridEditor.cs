@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 
@@ -14,7 +15,7 @@ public class SceneGridEditor : Editor {
         if (sg.save_images) {
             sg.folderpath = EditorGUILayout.TextField("Folderpath", sg.folderpath);
         }
-
+        
         EditorGUILayout.Space();
 
         sg.triangle_limit = EditorGUILayout.IntField("Triangle Limit", sg.triangle_limit);
@@ -48,6 +49,10 @@ public class SceneGridEditor : Editor {
 
     private void OnSceneGUI() {
         SceneGrid sg = (SceneGrid)target;
+        if (sg.transform.childCount == 0) {
+            return;
+        }
+
         if (!sg.is_initialized) {
             return;
         }
@@ -78,4 +83,6 @@ public class SceneGridEditor : Editor {
             }
         }
     }
+
+    
 }

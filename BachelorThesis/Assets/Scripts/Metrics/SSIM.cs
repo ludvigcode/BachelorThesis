@@ -23,8 +23,8 @@ public static class SSIM {
     }
 
     public static float compute_mssim_textures(Texture2D reference, Texture2D image, int width, int height) {
-        byte[] ref_bytes = reference.EncodeToPNG();
-        byte[] img_bytes = image.EncodeToPNG();
+        byte[] ref_bytes = reference.GetRawTextureData();
+        byte[] img_bytes = image.GetRawTextureData();
         return compute_mssim_byte(ref_bytes, img_bytes, width, height);
     }
 

@@ -169,7 +169,6 @@ public class FrustumNode : MonoBehaviour {
         frustum.Render();
 
         RenderTexture.active = tex;
-
         screen_shot.ReadPixels(new Rect(0, 0, width, height), 0, 0);
 
         RenderTexture.active = null;
