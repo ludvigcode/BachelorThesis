@@ -64,7 +64,7 @@ public class CameraPathEditor : Editor
         cp.update();
 
         _style.normal.textColor = Color.green;
-        _style.fontSize = 20;
+        _style.fontSize = 8;
 
         for (int i = 1; i < cp.point_array.Length; i++)
         {

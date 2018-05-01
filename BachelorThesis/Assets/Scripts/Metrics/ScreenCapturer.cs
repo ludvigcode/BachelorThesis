@@ -87,8 +87,8 @@ public class ScreenCapturer : MonoBehaviour {
             start_time = Time.realtimeSinceStartup;
             float index = SSIM.compute_mssim_byte(image1, image2, capture_width, capture_height);
             numbers[i] = Time.realtimeSinceStartup - start_time;
-            //Debug.Log("MSSIM Execution Time: " + (Time.realtimeSinceStartup - start_time));
-            //Debug.Log("MSSIM: " + index);
+            Debug.Log("MSSIM Execution Time: " + (Time.realtimeSinceStartup - start_time));
+            Debug.Log("MSSIM: " + index);
         }
 
         Debug.Log("MSSIM Average Execution Time: " + (numbers.Average()));

@@ -15,15 +15,15 @@ public class CameraPath : MonoBehaviour {
     public int ímg_width = 800;
     public int img_height = 600;
     public string folder_path = null;
+    public Transform[] point_array;
+    #endregion
 
+    #region Private Variables
     private Camera _m_cam;
-
     private float _progress = 0.0f;
     private int _index = 1;
     private bool _generated;
     private bool _finished;
-
-    public Transform[] point_array;
     #endregion
 
     #region Public Functions
@@ -73,7 +73,6 @@ public class CameraPath : MonoBehaviour {
             Debug.Log("Clear existing points before generate new points!");
         }
     }
-
     #endregion
 
     #region Private Functions
@@ -85,29 +84,34 @@ public class CameraPath : MonoBehaviour {
     private void Update() {
 
         if (_finished != true) {
-            _progress += Time.deltaTime;
+            _traverse_path();
+        }
+    }
 
-            if (_progress > steptime) {
-                _progress = 0.0f;
+    private void _traverse_path() {
 
-                _m_cam.transform.position = point_array[_index].position;
-                _m_cam.transform.rotation = point_array[_index].rotation;
+        _progress += Time.deltaTime;
 
-                if (save_images) {
-                    Texture2D tex = _take_screen_shoot(ímg_width, img_height);
-                    File.WriteAllBytes(folder_path + "/" + _index.ToString() + ".png", tex.EncodeToPNG());
-                    Destroy(tex);
-                }
+        if (_progress > steptime) {
+            _progress = 0.0f;
 
-                _index++;
+            _m_cam.transform.position = point_array[_index].position;
+            _m_cam.transform.rotation = point_array[_index].rotation;
 
-                if (_index >= point_array.Length) {
-                    if (loop) {
-                        _index = 1;
-                    } else {
-                        _finished = true;
-                        Debug.Log("Scene has been traversed!");
-                    }
+            if (save_images) {
+                Texture2D tex = _take_screen_shoot(ímg_width, img_height);
+                File.WriteAllBytes(folder_path + "/" + _index.ToString() + ".png", tex.EncodeToPNG());
+                Destroy(tex);
+            }
+
+            _index++;
+
+            if (_index >= point_array.Length) {
+                if (loop) {
+                    _index = 1;
+                } else {
+                    _finished = true;
+                    Debug.Log("Scene has been traversed!");
                 }
             }
         }

@@ -119,7 +119,7 @@ public class Simplification {
             simplifier.Initialize(list[i - 1]);
 
             // Simplify by a given percentage (0.5 = 50% by default).
-            simplifier.SimplifyMesh(0.25f);
+            simplifier.SimplifyMesh(0.5f);
 
             // Get the resulting mesh. 
             Mesh destMesh = simplifier.ToMesh();
