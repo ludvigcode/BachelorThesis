@@ -236,13 +236,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   points:
   - {x: 1, y: 0, z: 0}
-  - {x: 11.415867, y: 0, z: -13.648773}
-  - {x: 14.106125, y: 0, z: 24.113195}
-  - {x: 18.59617, y: 0, z: 0}
+  - {x: 2, y: 0, z: 0}
+  - {x: 3, y: 0, z: 0}
+  - {x: 4, y: 0, z: 0}
   force_Y: 0
   _forced_Y: 0
   _loop: 0
-  _initialized: 1
+  _initialized: 0
   _modes: 0000000000000000
 --- !u!4 &419373445
 Transform:
