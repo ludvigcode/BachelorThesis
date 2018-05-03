@@ -35,7 +35,6 @@ public class CameraPathEditor : Editor {
         EditorGUILayout.Space();
 
         cp.steptime = EditorGUILayout.FloatField("Step Time", cp.steptime);
-        cp.loop = EditorGUILayout.Toggle("Loop Path", cp.loop);
 
         EditorGUILayout.LabelField("Image Settings", EditorStyles.boldLabel);
         EditorGUILayout.Space();
