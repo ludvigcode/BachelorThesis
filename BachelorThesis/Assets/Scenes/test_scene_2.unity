@@ -1114,7 +1114,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4951148914713156, guid: 7b670bcae1745b042943f7fb0c2a68b2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 4951148914713156, guid: 7b670bcae1745b042943f7fb0c2a68b2, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1338,7 +1338,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4951148914713156, guid: 7b670bcae1745b042943f7fb0c2a68b2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 4951148914713156, guid: 7b670bcae1745b042943f7fb0c2a68b2, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1820,7 +1820,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4951148914713156, guid: 7b670bcae1745b042943f7fb0c2a68b2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 4951148914713156, guid: 7b670bcae1745b042943f7fb0c2a68b2, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2335,10 +2335,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f690e8dc50b760445a9bdd3232d2b269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 0}
   spline: {fileID: 419373444}
   frequency: 30
   lookForward: 1
-  loop: 0
   handle_size: 1
   steptime: 1
   save_images: 1
