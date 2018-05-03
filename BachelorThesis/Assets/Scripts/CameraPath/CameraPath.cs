@@ -15,6 +15,7 @@ public class CameraPath : MonoBehaviour {
     public int ímg_width = 800;
     public int img_height = 600;
     public string folder_path = null;
+    public string active_folder = null;
     public List<GameObject> point_array = null;
 
     private enum State {
@@ -93,12 +94,18 @@ public class CameraPath : MonoBehaviour {
             _finished = false;
 
             if (_active_state == State.REF) {
+                active_folder = folder_path + "/ref";
+                Directory.CreateDirectory(active_folder);
                 DLODGroup[] dlods = FindObjectsOfType<DLODGroup>();
                 foreach (DLODGroup d in dlods) {
                     d.set_to_original();
                 }
+            } else if (_active_state == State.OURS) {
+                active_folder = folder_path + "/ours";
+                Directory.CreateDirectory(active_folder);
             } else if (_active_state == State.UNITY) {
-
+                active_folder = folder_path + "/unity";
+                Directory.CreateDirectory(active_folder);
                 DLODGroup[] dlods = FindObjectsOfType<DLODGroup>();
                 foreach (DLODGroup d in dlods) {
                     d.set_to_original();
@@ -175,7 +182,7 @@ public class CameraPath : MonoBehaviour {
 
         if (save_images) {
             Texture2D tex = _take_screen_shoot(ímg_width, img_height);
-            File.WriteAllBytes(folder_path + "/" + _index.ToString() + ".png", tex.EncodeToPNG());
+            File.WriteAllBytes(active_folder + "/" + _index.ToString() + ".png", tex.EncodeToPNG());
             Destroy(tex);
         }
 
@@ -184,7 +191,6 @@ public class CameraPath : MonoBehaviour {
         if (_index >= point_array.Count) {
             _finished = true;
             _index = 0;
-            Debug.Log("Scene has been traversed!");
         }
     }
 
@@ -203,6 +209,5 @@ public class CameraPath : MonoBehaviour {
         Destroy(tex);
 
         return screen_shot;
-
     }
 }
