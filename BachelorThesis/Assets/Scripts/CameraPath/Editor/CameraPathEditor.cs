@@ -6,11 +6,8 @@ using UnityEditor;
 [CustomEditor(typeof(CameraPath))]
 public class CameraPathEditor : Editor {
 
-    #region Private Variables
     private GUIStyle _style = new GUIStyle();
-    #endregion
 
-    #region Public Functions
     public override void OnInspectorGUI() {
         CameraPath cp = (CameraPath)target;
 
@@ -47,25 +44,4 @@ public class CameraPathEditor : Editor {
             cp.img_height = EditorGUILayout.IntField("Image Height", cp.img_height);
         }
     }
-    #endregion
-
-    #region Private Functions
-    private void OnSceneGUI() {
-        // CameraPath cp = (CameraPath)target;
-        // 
-        // _style.normal.textColor = Color.green;
-        // _style.fontSize = 8;
-
-        //for (int i = 1; i < cp.point_array.Count; i++) {
-        //    Vector3 pos = cp.point_array[i].transform.position;
-        //    Quaternion rot = cp.point_array[i].transform.rotation;
-        //    Vector3 scale;
-        //    scale.x = scale.y = scale.z = cp.handle_size;
-        //    Handles.DrawWireCube(pos, scale);
-        //    Handles.ArrowHandleCap(0, pos, rot, cp.handle_size, EventType.Repaint);
-        //    pos.y += cp.handle_size + 1.0f;
-        //    Handles.Label(pos, "" + i, _style);
-        //}
-    }
-    #endregion
 }
