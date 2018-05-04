@@ -46,7 +46,7 @@ public class SceneGrid : MonoBehaviour {
         for (int x = 0; x <= size; ++x) {
             for (int z = 0; z <= size; ++z) {
                 for (int i = 0; i < 4; ++i) {
-                //    grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+                    grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
                 }
             }
         }
