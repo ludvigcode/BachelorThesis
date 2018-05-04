@@ -52,7 +52,7 @@ public class Simplification {
         _scene_objects = new List<RenderingTarget>();
 
         // Get all mesh filters in the scene.
-        MeshFilter[] filters = GameObject.FindObjectsOfType(typeof(MeshFilter)) as MeshFilter[];
+        MeshFilter[] filters = GameObject.FindObjectsOfType<MeshFilter>();
 
         // Loop through each mesh filter and create rendering targets from their meshes.
         foreach (MeshFilter filter in filters) {
