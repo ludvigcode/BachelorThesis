@@ -120,6 +120,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4099624826348744, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
       propertyPath: m_LocalPosition.x
       value: 22.38
@@ -155,6 +160,26 @@ Prefab:
     - target: {fileID: 1499304036193754, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
       propertyPath: m_Name
       value: sphere (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[4]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
@@ -312,6 +337,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4099624826348744, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
       propertyPath: m_LocalPosition.x
       value: 9.73
@@ -343,6 +373,26 @@ Prefab:
     - target: {fileID: 4099624826348744, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[4]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
@@ -407,6 +457,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4099624826348744, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
       propertyPath: m_LocalPosition.x
       value: 22.38
@@ -443,6 +498,26 @@ Prefab:
       propertyPath: m_Name
       value: sphere (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[4]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
   m_IsPrefabParent: 0
@@ -473,12 +548,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e5762637a30ea4a831f840f6c331b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  save_images: 1
-  folderpath: C:\Users\BTH\Desktop\Test
+  save_images: 0
+  folderpath: 
   max_dlod_versions: 5
   width: 800
   height: 600
-  triangle_limit: 50000
+  triangle_limit: 1000
   size: 10
   spread: 10
   y_height: 2
@@ -504,6 +579,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4099624826348744, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
       propertyPath: m_LocalPosition.x
       value: 2.56
@@ -539,6 +619,26 @@ Prefab:
     - target: {fileID: 1499304036193754, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}
       propertyPath: m_Name
       value: sphere (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945557833672568, guid: 3d5c3d4e85b169f4197b162cbfc77078,
+        type: 2}
+      propertyPath: dlods.Array.data[4]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3d5c3d4e85b169f4197b162cbfc77078, type: 2}

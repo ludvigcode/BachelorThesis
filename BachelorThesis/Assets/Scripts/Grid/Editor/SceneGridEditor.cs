@@ -38,6 +38,10 @@ public class SceneGridEditor : Editor {
 
         EditorGUILayout.Space();
 
+        if (GUILayout.Button("Simp")) {
+            sg.simplify();
+        }
+
         if (GUILayout.Button("Init")) {
             sg.init();
         }
@@ -83,6 +87,4 @@ public class SceneGridEditor : Editor {
             }
         }
     }
-
-    
 }

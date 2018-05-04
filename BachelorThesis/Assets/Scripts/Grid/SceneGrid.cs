@@ -14,7 +14,6 @@ public class SceneGrid : MonoBehaviour {
     public int spread = 10;
     public float y_height = 2.0f;
     public GameObject grid_obj = null;
-
     public Simplification simp = null;
 
     [SerializeField]
@@ -22,16 +21,12 @@ public class SceneGrid : MonoBehaviour {
 
     public bool is_initialized = false;
 
-    public void init() {
-        if (is_initialized) {
-            DestroyImmediate(grid_obj);
-        }
-
+    public void simplify() {
         simp = new Simplification();
         _create_dlods();
+    }
 
-        return;
-
+    public void init() {
         grid_obj = new GameObject();
         grid_obj.transform.parent = transform;
         grid = new GridNode[size + 1, size + 1];
@@ -51,7 +46,7 @@ public class SceneGrid : MonoBehaviour {
         for (int x = 0; x <= size; ++x) {
             for (int z = 0; z <= size; ++z) {
                 for (int i = 0; i < 4; ++i) {
-                    grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
+                //    grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
                 }
             }
         }
