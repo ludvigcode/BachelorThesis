@@ -39,16 +39,10 @@ public class RenderingTarget {
 
 public class Simplification {
 
-    #region Public Variables
     public int lod_levels;
     public Dictionary<int, List<Mesh>> table;
-    #endregion
 
-    #region Private Variables
     private List<RenderingTarget> _scene_objects;
-    #endregion
-
-    #region Public Variables
 
     public void create_lod() {
         // Create the dictionary.
@@ -58,7 +52,7 @@ public class Simplification {
         _scene_objects = new List<RenderingTarget>();
 
         // Get all mesh filters in the scene.
-        MeshFilter[] filters = GameObject.FindObjectsOfType(typeof(MeshFilter)) as MeshFilter[];
+        MeshFilter[] filters = GameObject.FindObjectsOfType<MeshFilter>();
 
         // Loop through each mesh filter and create rendering targets from their meshes.
         foreach (MeshFilter filter in filters) {
@@ -96,15 +90,9 @@ public class Simplification {
 
         }
 
-        // Save the LODs to asset files.
         _save_lods_to_file();
-
-        // Create gameobjects from the saved asset files.
         _create_dlod_objects();
     }
-    #endregion
-
-    #region Private Functions
 
     private void _generate_lod_versions(Mesh mesh, List<Mesh> list, int lod_count) {
         // The first instance in the LOD array is the default mesh.
@@ -163,15 +151,9 @@ public class Simplification {
         for (int i = 0; i < _scene_objects.Count; ++i) {
 
             // Get parent game object to LOD0. 
-            GameObject parent = _scene_objects[i].mesh_filter.gameObject.transform.parent.gameObject;
-
-            // Was parent game object valid?
+            Transform parent = _scene_objects[i].mesh_filter.transform.parent;
             if (parent) {
-
-                // Get the parent DLOD group.
                 DLODGroup group = parent.GetComponent<DLODGroup>();
-
-                // Was LOD Group valid?
                 if (group) {
 
                     // Get the shared mesh hash code.
@@ -185,6 +167,8 @@ public class Simplification {
                         GameObject obj = new GameObject(parent.name + "_lod" + j.ToString());
                         obj.transform.parent = parent.transform;
                         obj.transform.localPosition = Vector3.zero;
+                        obj.transform.localScale = Vector3.one;
+                        obj.transform.localRotation = Quaternion.identity;
 
                         // Give child game object mesh filter and mesh renderer.
                         MeshFilter newMeshFilter = obj.AddComponent<MeshFilter>();
@@ -218,6 +202,4 @@ public class Simplification {
             }
         }
     }
-    #endregion
-
 }

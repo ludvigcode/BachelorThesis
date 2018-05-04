@@ -40,7 +40,7 @@ public class CameraPathEditor : Editor {
 
         if (cp.save_images) {
             cp.folder_path = EditorGUILayout.TextField("Folderpath", cp.folder_path);
-            cp.ímg_width = EditorGUILayout.IntField("Image Width", cp.ímg_width);
+            cp.img_width = EditorGUILayout.IntField("Image Width", cp.img_width);
             cp.img_height = EditorGUILayout.IntField("Image Height", cp.img_height);
         }
     }

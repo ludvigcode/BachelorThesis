@@ -12,7 +12,7 @@ public class CameraPath : MonoBehaviour {
     public float handle_size = 1.0f;
     public float steptime;
     public bool save_images;
-    public int ímg_width = 800;
+    public int img_width = 800;
     public int img_height = 600;
     public string folder_path = null;
     public string active_folder = null;
@@ -26,7 +26,7 @@ public class CameraPath : MonoBehaviour {
         DONE
     }
 
-    private State _active_state = State.REF;
+    private State _active_state = State.BEGIN;
 
     private Camera _m_cam;
     private float _progress = 0.0f;
@@ -63,7 +63,9 @@ public class CameraPath : MonoBehaviour {
                 stepSize = 1f / (stepSize - 1);
             }
 
-            for (int f = 0; f < frequency; f++) {
+            point_array = new List<GameObject>();
+
+            for (int f = 0; f < frequency; ++f) {
                 Vector3 position = spline.get_point(f * stepSize);
                 GameObject go = new GameObject("Point_" + f);
                 go.transform.localPosition = position;
@@ -114,26 +116,31 @@ public class CameraPath : MonoBehaviour {
                     LOD[] lods = new LOD[5];
 
                     MeshRenderer[] m1 = new MeshRenderer[1];
+                    d.dlods[2].SetActive(true);
                     m1[0] = d.dlods[0].GetComponent<MeshRenderer>();
                     lods[0].renderers = m1;
                     lods[0].screenRelativeTransitionHeight = 0.5f;
 
                     MeshRenderer[] m2 = new MeshRenderer[1];
+                    d.dlods[2].SetActive(true);
                     m2[0] = d.dlods[1].GetComponent<MeshRenderer>();
                     lods[1].renderers = m1;
                     lods[1].screenRelativeTransitionHeight = 0.25f;
 
                     MeshRenderer[] m3 = new MeshRenderer[1];
+                    d.dlods[2].SetActive(true);
                     m1[0] = d.dlods[2].GetComponent<MeshRenderer>();
                     lods[2].renderers = m1;
                     lods[2].screenRelativeTransitionHeight = 0.125f;
 
                     MeshRenderer[] m4 = new MeshRenderer[1];
+                    d.dlods[2].SetActive(true);
                     m1[0] = d.dlods[3].GetComponent<MeshRenderer>();
                     lods[3].renderers = m1;
                     lods[3].screenRelativeTransitionHeight = 0.075f;
 
                     MeshRenderer[] m5 = new MeshRenderer[1];
+                    d.dlods[2].SetActive(true);
                     m1[0] = d.dlods[4].GetComponent<MeshRenderer>();
                     lods[4].renderers = m1;
                     lods[4].screenRelativeTransitionHeight = 0.01f;
@@ -181,7 +188,7 @@ public class CameraPath : MonoBehaviour {
         }
 
         if (save_images) {
-            Texture2D tex = _take_screen_shoot(ímg_width, img_height);
+            Texture2D tex = _take_screen_shoot(img_width, img_height);
             File.WriteAllBytes(active_folder + "/" + _index.ToString() + ".png", tex.EncodeToPNG());
             Destroy(tex);
         }

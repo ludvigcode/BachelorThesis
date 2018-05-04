@@ -30,6 +30,8 @@ public class SceneGrid : MonoBehaviour {
         simp = new Simplification();
         _create_dlods();
 
+        return;
+
         grid_obj = new GameObject();
         grid_obj.transform.parent = transform;
         grid = new GridNode[size + 1, size + 1];
