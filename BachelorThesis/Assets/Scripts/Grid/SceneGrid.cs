@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class SceneGrid : MonoBehaviour {
 
     public bool save_images = false;
     public string folderpath = null;
-    public int max_dlod_versions = 5;
     public int width = 800;
     public int height = 600;
     public int triangle_limit = 1000;
@@ -18,8 +19,12 @@ public class SceneGrid : MonoBehaviour {
 
     [SerializeField]
     public GridNode[,] grid;
-
     public bool is_initialized = false;
+
+    private string _start_time = "";
+    private string _end_time = "";
+    private int _max_dlod_versions = 5;
+
 
     public void simplify() {
         simp = new Simplification();
@@ -30,6 +35,8 @@ public class SceneGrid : MonoBehaviour {
         grid_obj = new GameObject();
         grid_obj.transform.parent = transform;
         grid = new GridNode[size + 1, size + 1];
+
+        _start_time = DateTime.Now.ToString(@"MM\/dd\/yyyy h\:mm tt");
 
         for (int x = 0; x <= size; ++x) {
             for (int z = 0; z <= size; ++z) {
@@ -49,6 +56,15 @@ public class SceneGrid : MonoBehaviour {
                     grid[x, z].generate_dlod_table((Direction)i, triangle_limit, width, height, save_images, folderpath);
                 }
             }
+        }
+
+        _end_time = DateTime.Now.ToString(@"MM\/dd\/yyyy h\:mm tt");
+
+        string time = _start_time + " \n" + _end_time;
+
+        if (save_images) {
+            File.WriteAllText(folderpath + "/" + "time.txt", time);
+
         }
 
         is_initialized = true;
@@ -180,7 +196,7 @@ public class SceneGrid : MonoBehaviour {
 
     private void _create_dlods() {
 
-        simp.lod_levels = max_dlod_versions;
+        simp.lod_levels = _max_dlod_versions;
         simp.create_lod();
     }
 }
