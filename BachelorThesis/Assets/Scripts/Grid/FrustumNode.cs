@@ -80,7 +80,7 @@ public class FrustumNode : MonoBehaviour {
             foreach (Pair<DLODGroup, float> dlod in dlod_ssim) {
                 // If false we, skip. The mesh will be culled.
                 if (!dlod.first.try_to_lower()) {
-                    dlod.second = dlod.first.num_dlod_versions() - 1;
+                    dlod.first.activate(dlod.first.num_dlod_versions() - 1);
                     continue;
                 }
 
