@@ -119,11 +119,8 @@ public class FrustumNode : MonoBehaviour {
             }
 
             if (index >= 0) {
-                if (dlod_ssim[index].first.try_to_lower()) {
-                    triangles = calc_triangles();
-                } else {
-                    triangles = 0;
-                }
+                dlod_ssim[index].first.try_to_lower();
+                triangles = calc_triangles();
             } else {
                 triangles = 0;
             }
